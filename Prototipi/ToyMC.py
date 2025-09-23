@@ -20,7 +20,7 @@ def montecarlo(time_of_experiment: float,
     '''
     eff_histo = []
     for _ in range(0,number_of_experiments):
-        time = 0
+        time = 0.
         number_of_events = 0
         A = False
         B = False
@@ -55,4 +55,3 @@ def montecarlo(time_of_experiment: float,
     plt.show()
 if __name__ == "__main__":
     montecarlo(1000,0.1,10000,0.80,0.30,0.50)
-#this is super shis
