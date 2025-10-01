@@ -1,32 +1,34 @@
 # %%
 import random as rng
 import numpy as np
+import matplotlib.pylab as plt
 from typing import Any
 from dataclasses import dataclass
 
 # %%
 @dataclass
 class Point3D:
-    '''
+    """
     Classe per i punti in uno spazio tridimensionale.
     Prende in inpit cordinate polari.
 
        cord_x : float
        cord_y : float
        cord_z : float
-    '''
+    """
 
     cord_x: float
     cord_y: float
     cord_z: float
 
     def magnitude(self):
-        '''
+        """
+        magnitude:
         Distanza del punto dall'origine
 
         Returns:
-            float 
-        '''
+            _type_: _description_
+        """
         return np.linalg.norm((self.cord_x, self.cord_y, self.cord_z))
 
     def polar(self) -> tuple:
@@ -35,38 +37,132 @@ class Point3D:
         del punto in una tupla del tipo (r,theta,phi)
         """
         radius = self.magnitude()
-        theta = np.arccos(self.cord_z/radius)
-        phi = np.arctan(self.cord_y/self.cord_x)
+        theta = np.arccos(self.cord_z / radius)
+        phi = np.arctan2(self.cord_y, self.cord_x)
         return (radius, theta, phi)
 
+    def distance_from(self, *args):
+        """
+        Calcola la distanza da un altro punto, che può essere fornito
+        in diversi formati:
+        1. Un altro oggetto Point3D
+        2. Una tupla o lista di 3 coordinate (es. (1, 2, 3))
+        3. Tre argomenti numerici separati (es. 1, 2, 3)
+
+        Returns:
+            float: distance from the two points
+        """
+        other_x, other_y, other_z = None,None,None
+
+        if len(args) == 1:
+            other = args[0]
+            if isinstance(other, Point3D):
+                other_x, other_y, other_z = other.cord_x, other.cord_y, other.cord_z
+        
+            elif isinstance(other, (tuple, list)) and len(other) == 3:
+                other_x, other_y, other_z = other
+
+        elif len(args) == 3:
+            other_x, other_y, other_z = args
+
+        if other_x is not None and other_y is not None and other_z is not None:
+            return np.linalg.norm(
+                (
+                    self.cord_x - float(other_x),
+                    self.cord_y - float(other_y),
+                    self.cord_z - float(other_z),
+                )
+            )
+        else:
+            raise TypeError(
+                "Invalid Input. Use Point3D, 3 element " \
+                "tuple/list or 3 float numbers"
+             )
+        
+    def __getitem__(self,
+                    index: int) -> float:
+        _points = (self.cord_x,self.cord_y,self.cord_z)
+        return _points[index]
+
 # %%
-class Muon:
+class Line:
     def __init__(self) -> None:
-        self.originpos = (0, 0, 0)
+        self.originpos = Point3D(0, 0, 0)
         self.theta = 0
         self.phi = 0
-        self.energy = 0
-        self.momentum = 0 
         self.generate()
-        self.decayed = False
 
-    def __call__(self, point: Point3D) -> Any:
-        pass
+    def set_origin(self,
+                   coord):
+        if len(coord) == 3:
+            self.originpos = coord
+        else:
+            raise TypeError("coord must have 3 element ")
 
     def generate(self) -> None:
-        self.originpos = (rng.random(), rng.random(), rng.random())
+        self.originpos = Point3D(rng.random(), rng.random(), rng.random())
         self.theta = rng.uniform(0.0, np.pi)
         self.phi = rng.uniform(0.0, 2 * np.pi)
+    
+    def punto_appartiene_alla_retta(self):
+        pass
+        
 
-    def decay(self,
-              time_passed : float) -> None:
+# %%
+class Particle(Line):
+    def __init__(self) -> None:
+        super().__init__()
+        self.energy = 0.
+        self.mass = 0.
+        self.charge = 0
+        self.momentum = 0. 
+        self.decayed = False
+        # da finire
+
+    def decay(self, time_passed: float) -> None:
         if self.decayed:
             return None
         # vedere se decade in qualche modo
-    
 
 # %%
-class Absorber:
+class Muon(Particle):
+    def __init__(self) -> None:
+        super().__init__()
+        self.mass = 105.66 #MeV
+        self.charge = -1
+        
+
+# %%
+class Paralleogram:
+
+    def __init__(self) -> None:
+        self.pos_x = 0.
+        self.pos_y = 0.
+        self.pos_z = 0.
+        self.dir_x = 0.
+        self.dir_y = 0.
+        self.dir_z = 0.
+
+    def set_position(self,
+                     point: tuple) -> None:
+        self.pos_x = point[0]
+        self.pos_y = point[1]
+        self.pos_z = point[2]
+
+    def set_dimensions(self,
+                       dir_x : float,
+                       dir_y : float,
+                       dir_z : float) -> None:
+        self.dir_x = dir_x
+        self.dir_y = dir_y
+        self.dir_z = dir_z
+    
+    def intersect_with_line(self,
+                            line : Line):
+            _inter_sup_plan = (self.pos_z - line.originpos.cord_z)
+
+# %%
+class Absorber(Paralleogram):
 
     def __init__(self,
                  density : float,
@@ -76,31 +172,27 @@ class Absorber:
         self.atomic_number = atomic_number
         self.atomic_mass = atomic_mass
 
-    def set_position(self,
-                     point: Point3D):
-        self.pos_x = point.cord_x
-        self.pos_y = point.cord_y
-        self.pos_z = point.cord_z
-
-    def set_dimensions(self,
-                       dir_x : float,
-                       dir_y : float,
-                       dir_z : float) -> None:
-        self.dir_x = dir_x
-        self.dir_y = dir_y
-        self.dir_z = dir_z
-
     def max_traveling_distance(self,
                                particle: Muon) -> float:
         # calcolare la distanza massima
         distance = 0
         return distance 
-
+    
     def assorbing(self,
                   particle: Muon) -> None:
         
-        rng.uniform(0.,self.max_traveling_distance(particle))
-                
-        
+        rng.uniform(0.,self.max_traveling_distance(particle))            
+
+# %%
+pino = Absorber(0.5,1,1)
+
+# %%
+pino.set_dimensions(4,4,4)
+
+# %%
+pino.set_position((0,0,0))
+
+# %%
+Muon
 
 
