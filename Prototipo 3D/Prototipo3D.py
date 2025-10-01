@@ -88,8 +88,8 @@ class Point3D:
 class Line:
     def __init__(self) -> None:
         self.originpos = Point3D(0, 0, 0)
-        self.theta = 0
-        self.phi = 0
+        self.theta = 0.
+        self.phi = 0.
         self.generate()
 
     def set_origin(self,
@@ -103,6 +103,13 @@ class Line:
         self.originpos = Point3D(rng.random(), rng.random(), rng.random())
         self.theta = rng.uniform(0.0, np.pi)
         self.phi = rng.uniform(0.0, 2 * np.pi)
+        self._direction_vector()
+
+    def _direction_vector(self):
+        _vx = np.cos(self.phi) * np.cos(self.theta)
+        _vy = np.cos(self.phi) * np.sin(self.theta)
+        _vz = np.sin(self.phi)
+        self.d_vector = (_vx,_vy,_vz)
     
     def punto_appartiene_alla_retta(self):
         pass
@@ -156,10 +163,18 @@ class Paralleogram:
         self.dir_x = dir_x
         self.dir_y = dir_y
         self.dir_z = dir_z
-    
+
     def intersect_with_line(self,
                             line : Line):
-            _inter_sup_plan = (self.pos_z - line.originpos.cord_z)
+        pass
+        # non mi piace così
+        # _inter_sup_plan = (self.pos_z - line.originpos[2]) / line.d_vector[2]
+        # _x_sup_plan = line.d_vector[0] * _inter_sup_plan + line.originpos[0]
+        # _y_sup_plan = line.d_vector[1] * _inter_sup_plan + line.originpos[1]
+        # if _x_sup_plan > self.pos_x and _x_sup_plan < self.pos_x + self.dir_x:
+        #     if _y_sup_plan > self.pos_y and _y_sup_plan < self.pos_y + self.dir_y:
+        #         pass
+        
 
 # %%
 class Absorber(Paralleogram):
