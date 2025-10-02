@@ -1,9 +1,11 @@
 # %%
+from typing import Any
 import random as rng
 import numpy as np
 import matplotlib.pylab as plt
-from typing import Any
 from dataclasses import dataclass
+
+DIMENSION_RESOLUTION = 1e-4
 
 # %%
 @dataclass
@@ -20,6 +22,9 @@ class Point3D:
     cord_x: float
     cord_y: float
     cord_z: float
+
+    def set_cord(self,*args):
+        pass
 
     def magnitude(self):
         """
@@ -110,13 +115,19 @@ class Line:
         _vy = np.cos(self.phi) * np.sin(self.theta)
         _vz = np.sin(self.phi)
         self.d_vector = (_vx,_vy,_vz)
-    
-    def punto_appartiene_alla_retta(self):
-        pass
-        
+
+    def is_point_on_line(self,
+                         point: Point3D) -> bool:
+        _var1 = (self.originpos.cord_x - point.cord_x) / self.d_vector[0]
+        _var2 = (self.originpos.cord_y - point.cord_y) / self.d_vector[1]
+        _var3 = (self.originpos.cord_z - point.cord_z) / self.d_vector[2]
+        if _var1 == _var2 and _var1 == _var3:
+            return True
+        return False
 
 # %%
 class Particle(Line):
+
     def __init__(self) -> None:
         super().__init__()
         self.energy = 0.
@@ -137,7 +148,6 @@ class Muon(Particle):
         super().__init__()
         self.mass = 105.66 #MeV
         self.charge = -1
-        
 
 # %%
 class Paralleogram:
@@ -166,14 +176,21 @@ class Paralleogram:
 
     def intersect_with_line(self,
                             line : Line):
-        pass
-        # non mi piace così
-        # _inter_sup_plan = (self.pos_z - line.originpos[2]) / line.d_vector[2]
-        # _x_sup_plan = line.d_vector[0] * _inter_sup_plan + line.originpos[0]
-        # _y_sup_plan = line.d_vector[1] * _inter_sup_plan + line.originpos[1]
-        # if _x_sup_plan > self.pos_x and _x_sup_plan < self.pos_x + self.dir_x:
-        #     if _y_sup_plan > self.pos_y and _y_sup_plan < self.pos_y + self.dir_y:
-        #         pass
+        inside = False
+        start = Point3D(0,0,0)
+        end = Point3D(0,0,0)
+        for depth in np.arange(self.pos_z,self.pos_z + self.dir_z,DIMENSION_RESOLUTION):
+            z_var = (depth - line.originpos[2]) / line.d_vector[2]
+            x_var = line.d_vector[0] * z_var + line.originpos[0]
+            y_var = line.d_vector[1] * z_var + line.originpos[1]
+            if x_var > self.pos_x and x_var < self.pos_x + self.dir_x:
+                if y_var > self.pos_y and y_var < self.pos_y + self.dir_y:
+                    if not inside:
+                        inside = True
+                        start = Point3D(x_var,y_var,z_var)
+                    
+                        
+
         
 
 # %%
