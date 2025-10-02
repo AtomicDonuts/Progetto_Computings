@@ -1,11 +1,12 @@
 # %%
+from dataclasses import dataclass
 from typing import Any
 import random as rng
 import numpy as np
 import matplotlib.pylab as plt
-from dataclasses import dataclass
 
 DIMENSION_RESOLUTION = 1e-4
+
 
 # %%
 @dataclass
@@ -23,10 +24,10 @@ class Point3D:
     cord_y: float
     cord_z: float
 
-    def set_cord(self,*args):
+    def set_cord(self, *args):
         pass
 
-    def magnitude(self):
+    def magnitude(self) -> Any:
         """
         magnitude:
         Distanza del punto dall'origine
@@ -57,13 +58,13 @@ class Point3D:
         Returns:
             float: distance from the two points
         """
-        other_x, other_y, other_z = None,None,None
+        other_x, other_y, other_z = None, None, None
 
         if len(args) == 1:
             other = args[0]
             if isinstance(other, Point3D):
                 other_x, other_y, other_z = other.cord_x, other.cord_y, other.cord_z
-        
+
             elif isinstance(other, (tuple, list)) and len(other) == 3:
                 other_x, other_y, other_z = other
 
@@ -80,44 +81,73 @@ class Point3D:
             )
         else:
             raise TypeError(
-                "Invalid Input. Use Point3D, 3 element " \
-                "tuple/list or 3 float numbers"
-             )
-        
-    def __getitem__(self,
-                    index: int) -> float:
-        _points = (self.cord_x,self.cord_y,self.cord_z)
+                "Invalid Input. Use Point3D, 3 element " "tuple/list or 3 float numbers"
+            )
+
+    def __getitem__(self, index: int) -> float:
+        _points = (self.cord_x, self.cord_y, self.cord_z)
         return _points[index]
+
 
 # %%
 class Line:
+    """
+    _summary_
+    """
+
     def __init__(self) -> None:
         self.originpos = Point3D(0, 0, 0)
-        self.theta = 0.
-        self.phi = 0.
+        self.theta = 0.0
+        self.phi = 0.0
         self.generate()
+        self.d_vector = self._direction_vector()
 
-    def set_origin(self,
-                   coord):
+    def set_origin(self, coord):
+        """
+        set_origin _summary_
+
+        Args:
+            coord (_type_): _description_
+
+        Raises:
+            TypeError: _description_
+        """
         if len(coord) == 3:
             self.originpos = coord
         else:
             raise TypeError("coord must have 3 element ")
 
     def generate(self) -> None:
+        """
+        generate _summary_
+        """
         self.originpos = Point3D(rng.random(), rng.random(), rng.random())
         self.theta = rng.uniform(0.0, np.pi)
         self.phi = rng.uniform(0.0, 2 * np.pi)
         self._direction_vector()
 
     def _direction_vector(self):
+        """
+        _direction_vector _summary_
+
+        Returns:
+            _type_: _description_
+        """
         _vx = np.cos(self.phi) * np.cos(self.theta)
         _vy = np.cos(self.phi) * np.sin(self.theta)
         _vz = np.sin(self.phi)
-        self.d_vector = (_vx,_vy,_vz)
+        return (_vx, _vy, _vz)
 
-    def is_point_on_line(self,
-                         point: Point3D) -> bool:
+    def is_point_on_line(self, point: Point3D) -> bool:
+        """
+        is_point_on_line _summary_
+
+        Args:
+            point (Point3D): _description_
+
+        Returns:
+            bool: _description_
+        """
         _var1 = (self.originpos.cord_x - point.cord_x) / self.d_vector[0]
         _var2 = (self.originpos.cord_y - point.cord_y) / self.d_vector[1]
         _var3 = (self.originpos.cord_z - point.cord_z) / self.d_vector[2]
@@ -125,61 +155,115 @@ class Line:
             return True
         return False
 
+
 # %%
 class Particle(Line):
+    """
+    Particle _summary_
+
+    Args:
+        Line (_type_): _description_
+    """
 
     def __init__(self) -> None:
+        """
+        __init__ _summary_
+        """
         super().__init__()
-        self.energy = 0.
-        self.mass = 0.
+        self.energy = 0.0
+        self.mass = 0.0
         self.charge = 0
-        self.momentum = 0. 
+        self.momentum = 0.0
         self.decayed = False
         # da finire
 
     def decay(self, time_passed: float) -> None:
+        """
+        decay _summary_
+
+        Args:
+            time_passed (float): _description_
+
+        Returns:
+            _type_: _description_
+        """
         if self.decayed:
             return None
         # vedere se decade in qualche modo
 
+
 # %%
 class Muon(Particle):
+    """
+    Muon _summary_
+
+    Args:
+        Particle (_type_): _description_
+    """
+
     def __init__(self) -> None:
+        """
+        __init__ _summary_
+        """
         super().__init__()
-        self.mass = 105.66 #MeV
+        self.mass = 105.66  # MeV
         self.charge = -1
+
 
 # %%
 class Paralleogram:
+    """
+    _summary_
+    """
 
     def __init__(self) -> None:
-        self.pos_x = 0.
-        self.pos_y = 0.
-        self.pos_z = 0.
-        self.dir_x = 0.
-        self.dir_y = 0.
-        self.dir_z = 0.
+        """
+        __init__ _summary_
+        """
+        self.pos_x = 0.0
+        self.pos_y = 0.0
+        self.pos_z = 0.0
+        self.dir_x = 0.0
+        self.dir_y = 0.0
+        self.dir_z = 0.0
 
-    def set_position(self,
-                     point: tuple) -> None:
+    def set_position(self, point: tuple) -> None:
+        """
+        set_position _summary_
+
+        Args:
+            point (tuple): _description_
+        """
         self.pos_x = point[0]
         self.pos_y = point[1]
         self.pos_z = point[2]
 
-    def set_dimensions(self,
-                       dir_x : float,
-                       dir_y : float,
-                       dir_z : float) -> None:
+    def set_dimensions(self, dir_x: float, dir_y: float, dir_z: float) -> None:
+        """
+        set_dimensions _summary_
+
+        Args:
+            dir_x (float): _description_
+            dir_y (float): _description_
+            dir_z (float): _description_
+        """
         self.dir_x = dir_x
         self.dir_y = dir_y
         self.dir_z = dir_z
 
-    def intersect_with_line(self,
-                            line : Line):
+    def intersect_with_line(self, line: Line):
+        """
+        intersect_with_line _summary_
+
+        Args:
+            line (Line): _description_
+        """
         inside = False
-        start = Point3D(0,0,0)
-        end = Point3D(0,0,0)
-        for depth in np.arange(self.pos_z,self.pos_z + self.dir_z,DIMENSION_RESOLUTION):
+        start = Point3D(0, 0, 0)
+        end = Point3D(0, 0, 0)
+        for depth in np.arange(
+            self.pos_z, self.pos_z + self.dir_z, DIMENSION_RESOLUTION
+        ):
             z_var = (depth - line.originpos[2]) / line.d_vector[2]
             x_var = line.d_vector[0] * z_var + line.originpos[0]
             y_var = line.d_vector[1] * z_var + line.originpos[1]
@@ -187,44 +271,42 @@ class Paralleogram:
                 if y_var > self.pos_y and y_var < self.pos_y + self.dir_y:
                     if not inside:
                         inside = True
-                        start = Point3D(x_var,y_var,z_var)
-                    
-                        
+                        start = Point3D(x_var, y_var, z_var)
 
-        
 
 # %%
 class Absorber(Paralleogram):
+    """
+    Absorber _summary_
 
-    def __init__(self,
-                 density : float,
-                 atomic_number : int,
-                 atomic_mass : int) -> None:
+    Args:
+        Paralleogram (_type_): _description_
+    """
+
+    def __init__(self, density: float, atomic_number: int, atomic_mass: int) -> None:
         self.density = density
         self.atomic_number = atomic_number
         self.atomic_mass = atomic_mass
 
-    def max_traveling_distance(self,
-                               particle: Muon) -> float:
-        # calcolare la distanza massima
+    def max_traveling_distance(self, particle: Muon) -> float:
+        """
+        max_traveling_distance
+        calcolare la distanza massima
+        Args:
+            particle (Muon): _description_
+
+        Returns:
+            float: _description_
+        """
+
         distance = 0
-        return distance 
-    
-    def assorbing(self,
-                  particle: Muon) -> None:
-        
-        rng.uniform(0.,self.max_traveling_distance(particle))            
+        return distance
 
-# %%
-pino = Absorber(0.5,1,1)
+    def assorbing(self, particle: Muon) -> None:
+        """
+        assorbing _summary_
 
-# %%
-pino.set_dimensions(4,4,4)
-
-# %%
-pino.set_position((0,0,0))
-
-# %%
-Muon
-
-
+        Args:
+            particle (Muon): _description_
+        """
+        rng.uniform(0.0, self.max_traveling_distance(particle))
