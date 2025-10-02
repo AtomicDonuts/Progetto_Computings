@@ -1,4 +1,7 @@
 # %%
+'''
+Pasquale Napoli 
+'''
 from dataclasses import dataclass
 from typing import Any
 import random as rng
@@ -24,8 +27,11 @@ class Point3D:
     cord_y: float
     cord_z: float
 
-    def set_cord(self, *args):
-        pass
+    # def set_cord(self, *args):
+    #     '''
+    #     set_cord _summary_
+    #     '''
+    #     pass
 
     def magnitude(self) -> Any:
         """
@@ -81,7 +87,7 @@ class Point3D:
             )
         else:
             raise TypeError(
-                "Invalid Input. Use Point3D, 3 element " "tuple/list or 3 float numbers"
+                "Invalid Input. Use Point3D, 3 element tuple/list or 3 float numbers"
             )
 
     def __getitem__(self, index: int) -> float:
@@ -177,7 +183,7 @@ class Particle(Line):
         self.decayed = False
         # da finire
 
-    def decay(self, time_passed: float) -> None:
+    def decay(self, time_passed: float):
         """
         decay _summary_
 
@@ -188,7 +194,7 @@ class Particle(Line):
             _type_: _description_
         """
         if self.decayed:
-            return None
+            return time_passed
         # vedere se decade in qualche modo
 
 
@@ -284,6 +290,7 @@ class Absorber(Paralleogram):
     """
 
     def __init__(self, density: float, atomic_number: int, atomic_mass: int) -> None:
+        super().__init__()
         self.density = density
         self.atomic_number = atomic_number
         self.atomic_mass = atomic_mass
