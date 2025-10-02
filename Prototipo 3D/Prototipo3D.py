@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import Any
 import random as rng
 import numpy as np
-import matplotlib.pylab as plt
+# import matplotlib.pylab as plt
 
 DIMENSION_RESOLUTION = 1e-4
 
@@ -93,6 +93,13 @@ class Point3D:
     def __getitem__(self, index: int) -> float:
         _points = (self.cord_x, self.cord_y, self.cord_z)
         return _points[index]
+
+    def __add__(self,point : "Point3D") -> "Point3D":
+        return Point3D(
+            self.cord_x + point.cord_x,
+            self.cord_y + point.cord_y,
+            self.cord_z + point.cord_z,
+        )
 
 
 # %%
@@ -229,9 +236,8 @@ class Paralleogram:
         self.pos_x = 0.0
         self.pos_y = 0.0
         self.pos_z = 0.0
-        self.dir_x = 0.0
-        self.dir_y = 0.0
-        self.dir_z = 0.0
+        self.set_position((0,0,0))
+        self.set_dimensions(0,0,0)
 
     def set_position(self, point: tuple) -> None:
         """
@@ -243,6 +249,7 @@ class Paralleogram:
         self.pos_x = point[0]
         self.pos_y = point[1]
         self.pos_z = point[2]
+        self.vertex1 = Point3D(self.pos_x,self.pos_y,self.pos_z)
 
     def set_dimensions(self, dir_x: float, dir_y: float, dir_z: float) -> None:
         """
@@ -256,29 +263,25 @@ class Paralleogram:
         self.dir_x = dir_x
         self.dir_y = dir_y
         self.dir_z = dir_z
+        self.vertex2 = Point3D(
+            self.pos_x + self.dir_x,
+            self.pos_y + self.dir_y,
+            self.pos_z + self.dir_z
+        )
 
     def intersect_with_line(self, line: Line):
         """
-        intersect_with_line _summary_
+        intersect_with_line:
+        Slab Method AABB 
 
         Args:
             line (Line): _description_
         """
-        inside = False
-        start = Point3D(0, 0, 0)
-        end = Point3D(0, 0, 0)
-        for depth in np.arange(
-            self.pos_z, self.pos_z + self.dir_z, DIMENSION_RESOLUTION
-        ):
-            z_var = (depth - line.originpos[2]) / line.d_vector[2]
-            x_var = line.d_vector[0] * z_var + line.originpos[0]
-            y_var = line.d_vector[1] * z_var + line.originpos[1]
-            if x_var > self.pos_x and x_var < self.pos_x + self.dir_x:
-                if y_var > self.pos_y and y_var < self.pos_y + self.dir_y:
-                    if not inside:
-                        inside = True
-                        start = Point3D(x_var, y_var, z_var)
-
+        # x_cord_1 = (self.pos_x - line.originpos.cord_x)/line.d_vector[0]
+        # x_cord_2 = (self.pos_x + self.dir_x - line.originpos.cord_x) / line.d_vector[0]
+        # x_close = np.min((x_cord_1, x_cord_2))
+        # x_far = np.max((x_cord_1, x_cord_2))
+        cord = self.vertex1 - line.originpos
 
 # %%
 class Absorber(Paralleogram):
@@ -305,7 +308,7 @@ class Absorber(Paralleogram):
         Returns:
             float: _description_
         """
-
+        print(particle.mass)
         distance = 0
         return distance
 
