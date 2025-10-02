@@ -2,7 +2,6 @@
 '''
 Pasquale Napoli 
 '''
-from dataclasses import dataclass
 from typing import Any
 import random as rng
 import numpy as np
@@ -12,7 +11,6 @@ DIMENSION_RESOLUTION = 1e-4
 
 
 # %%
-@dataclass
 class Point3D:
     """
     Classe per i punti in uno spazio tridimensionale.
@@ -22,16 +20,11 @@ class Point3D:
        cord_y : float
        cord_z : float
     """
-
-    cord_x: float
-    cord_y: float
-    cord_z: float
-
-    # def set_cord(self, *args):
-    #     '''
-    #     set_cord _summary_
-    #     '''
-    #     pass
+    def __init__(self,cord_x,cord_y,cord_z) -> None:
+        self.cord_x = cord_x
+        self.cord_y = cord_y
+        self.cord_z = cord_z
+        self.np_cord = np.array([cord_x,cord_y,cord_z],dtype= float)
 
     def magnitude(self) -> Any:
         """
@@ -94,13 +87,24 @@ class Point3D:
         _points = (self.cord_x, self.cord_y, self.cord_z)
         return _points[index]
 
-    def __add__(self,point : "Point3D") -> "Point3D":
-        return Point3D(
-            self.cord_x + point.cord_x,
-            self.cord_y + point.cord_y,
-            self.cord_z + point.cord_z,
-        )
-
+    # def __add__(self,other : "Point3D") -> "Point3D":
+    #     return Point3D(
+    #         self.cord_x + other.cord_x,
+    #         self.cord_y + other.cord_y,
+    #         self.cord_z + other.cord_z,
+    #     )
+    # def __sub__(self,other : "Point3D") -> "Point3D":
+    #     return Point3D(
+    #         self.cord_x - other.cord_x,
+    #         self.cord_y - other.cord_y,
+    #         self.cord_z - other.cord_z,
+    #     )
+    # def __mul__(self,scalar) -> "Point3D":
+    #     return Point3D(
+    #         self.cord_x * scalar,
+    #         self.cord_y * scalar,
+    #         self.cord_z * scalar,
+    #     )
 
 # %%
 class Line:
@@ -272,7 +276,8 @@ class Paralleogram:
     def intersect_with_line(self, line: Line):
         """
         intersect_with_line:
-        Slab Method AABB 
+        Slab Method AABB
+        Syntax from Wikepedia
 
         Args:
             line (Line): _description_
@@ -281,7 +286,11 @@ class Paralleogram:
         # x_cord_2 = (self.pos_x + self.dir_x - line.originpos.cord_x) / line.d_vector[0]
         # x_close = np.min((x_cord_1, x_cord_2))
         # x_far = np.max((x_cord_1, x_cord_2))
-        cord = self.vertex1 - line.originpos
+        cord_low = np.divide(self.vertex1.np_cord - line.originpos.np_cord,line.d_vector)
+        cord_high = np.divide(
+            self.vertex2.np_cord - line.originpos.np_cord, line.d_vector
+        )
+        
 
 # %%
 class Absorber(Paralleogram):
