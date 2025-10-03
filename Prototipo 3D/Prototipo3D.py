@@ -4,8 +4,10 @@ Pasquale Napoli
 
 from typing import Any
 import random as rng
-import numpy as np
 from loguru import logger
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+import numpy as np
 
 # import matplotlib.pylab as plt
 
@@ -226,9 +228,9 @@ class Muon(Particle):
         self.charge = -1
 
 
-class Paralleogram:
+class Parallelepiped:
     """
-    _summary_
+    Solo parallelepipedi rettangoli (per ora)
     """
 
     def __init__(self) -> None:
@@ -240,6 +242,7 @@ class Paralleogram:
         self.pos_z = 0.0
         self.set_position((0, 0, 0))
         self.set_dimensions(0, 0, 0)
+        self.construct_vertex()
 
     def set_position(self, point: tuple) -> None:
         """
@@ -251,7 +254,7 @@ class Paralleogram:
         self.pos_x = point[0]
         self.pos_y = point[1]
         self.pos_z = point[2]
-        self.vertex1 = Point3D(self.pos_x, self.pos_y, self.pos_z)
+        self.vertex0 = Point3D(self.pos_x, self.pos_y, self.pos_z)
 
     def set_dimensions(self, dir_x: float, dir_y: float, dir_z: float) -> None:
         """
@@ -265,9 +268,81 @@ class Paralleogram:
         self.dir_x = dir_x
         self.dir_y = dir_y
         self.dir_z = dir_z
+        self.construct_vertex()
+
+    def construct_vertex(self):
+        """
+        construct_vertex _summary_
+        """
+        self.vertex1 = Point3D(self.pos_x + self.dir_x, self.pos_y, self.pos_z)
         self.vertex2 = Point3D(
+            self.pos_x + self.dir_x, self.pos_y + self.dir_y, self.pos_z
+        )
+        self.vertex3 = Point3D(self.pos_x, self.pos_y + self.dir_y, self.pos_z)
+        self.vertex4 = Point3D(self.pos_x, self.pos_y, self.pos_z + self.dir_z)
+        self.vertex5 = Point3D(
+            self.pos_x + self.dir_x, self.pos_y, self.pos_z + self.dir_z
+        )
+        self.vertex6 = Point3D(
             self.pos_x + self.dir_x, self.pos_y + self.dir_y, self.pos_z + self.dir_z
         )
+        self.vertex7 = Point3D(
+            self.pos_x, self.pos_y + self.dir_y, self.pos_z + self.dir_z
+        )
+
+    def obj3d(self, *args: Any, **kwds: Any):
+        """
+        ritorna l'oggetto 3d in modo che matplotlib lo possa plottare
+        utilizzando ax.add_collection3d(xxxx.obj3d())
+        per un esempio controllare test_parallelepiped_obj3d
+        """
+        faces = [
+            # Faccia inferiore
+            [
+                self.vertex0.np_cord,
+                self.vertex1.np_cord,
+                self.vertex2.np_cord,
+                self.vertex3.np_cord,
+            ],
+            # Faccia superiore
+            [
+                self.vertex4.np_cord,
+                self.vertex5.np_cord,
+                self.vertex6.np_cord,
+                self.vertex7.np_cord,
+            ],
+            # Faccia posteriore
+            [
+                self.vertex2.np_cord,
+                self.vertex3.np_cord,
+                self.vertex7.np_cord,
+                self.vertex6.np_cord,
+            ],
+            # Faccia anteriore
+            [
+                self.vertex0.np_cord,
+                self.vertex1.np_cord,
+                self.vertex5.np_cord,
+                self.vertex4.np_cord,
+            ],
+            # Faccia sinistra
+            [
+                self.vertex0.np_cord,
+                self.vertex3.np_cord,
+                self.vertex7.np_cord,
+                self.vertex4.np_cord,
+            ],
+            # Faccia destra
+            [
+                self.vertex1.np_cord,
+                self.vertex2.np_cord,
+                self.vertex6.np_cord,
+                self.vertex5.np_cord,
+            ],
+        ]
+
+        poly3d = Poly3DCollection(faces, *args, *kwds)
+        return poly3d
 
     def intersect_with_line(self, line: Line):
         """
@@ -279,8 +354,8 @@ class Paralleogram:
             line (Line): _description_
         """
         _d_vector = np.where(line.d_vector == 0.0, 1e-12, line.d_vector)
-        cord_low = np.divide(self.vertex1.np_cord - line.originpos.np_cord, _d_vector)
-        cord_high = np.divide(self.vertex2.np_cord - line.originpos.np_cord, _d_vector)
+        cord_low = np.divide(self.vertex0.np_cord - line.originpos.np_cord, _d_vector)
+        cord_high = np.divide(self.vertex6.np_cord - line.originpos.np_cord, _d_vector)
         cord_close_far = np.dstack((cord_low, cord_high))
         t_close = cord_close_far.min(axis=2).max()
         t_far = cord_close_far.max(axis=2).min()
@@ -292,7 +367,7 @@ class Paralleogram:
         return [False, [None, None]]
 
 
-class Absorber(Paralleogram):
+class Absorber(Parallelepiped):
     """
     Absorber _summary_
 

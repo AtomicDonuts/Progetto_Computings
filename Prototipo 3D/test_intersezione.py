@@ -11,7 +11,7 @@ linea.phi = 0
 linea.d_vector = linea._direction_vector()
 print(linea.d_vector)
 
-para = lib.Paralleogram()
+para = lib.Parallelepiped()
 para.set_position((1, -0.5, -0.5))
 para.set_dimensions(1, 1, 1)
 if para.intersect_with_line(linea)[0]:
