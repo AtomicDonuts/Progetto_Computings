@@ -1,4 +1,4 @@
-# %%
+
 '''
 Pasquale Napoli 
 '''
@@ -10,7 +10,7 @@ import numpy as np
 DIMENSION_RESOLUTION = 1e-4
 
 
-# %%
+
 class Point3D:
     """
     Classe per i punti in uno spazio tridimensionale.
@@ -87,26 +87,10 @@ class Point3D:
         _points = (self.cord_x, self.cord_y, self.cord_z)
         return _points[index]
 
-    # def __add__(self,other : "Point3D") -> "Point3D":
-    #     return Point3D(
-    #         self.cord_x + other.cord_x,
-    #         self.cord_y + other.cord_y,
-    #         self.cord_z + other.cord_z,
-    #     )
-    # def __sub__(self,other : "Point3D") -> "Point3D":
-    #     return Point3D(
-    #         self.cord_x - other.cord_x,
-    #         self.cord_y - other.cord_y,
-    #         self.cord_z - other.cord_z,
-    #     )
-    # def __mul__(self,scalar) -> "Point3D":
-    #     return Point3D(
-    #         self.cord_x * scalar,
-    #         self.cord_y * scalar,
-    #         self.cord_z * scalar,
-    #     )
+    def __str__(self) -> str:
+        return f"Point3D\n x:{self.cord_x} y:{self.cord_y} z:{self.cord_z}"
 
-# %%
+
 class Line:
     """
     _summary_
@@ -185,10 +169,10 @@ class Line:
             Point3D: _description_
         '''
         _point = self.d_vector * parameter + self.originpos.np_cord
-        return Point3D(_point[0],_point[1],_point[3]) 
+        return Point3D(_point[0],_point[1],_point[2])
 
 
-# %%
+
 class Particle(Line):
     """
     Particle _summary_
@@ -224,7 +208,7 @@ class Particle(Line):
         # vedere se decade in qualche modo
 
 
-# %%
+
 class Muon(Particle):
     """
     Muon _summary_
@@ -242,7 +226,7 @@ class Muon(Particle):
         self.charge = -1
 
 
-# %%
+
 class Paralleogram:
     """
     _summary_
@@ -307,13 +291,13 @@ class Paralleogram:
         )
         cord_close_far = np.dstack((cord_low,cord_high))
         t_close = cord_close_far.min(axis=2).max()
-        t_far = cord_close_far.max(axis=2).mix()
+        t_far = cord_close_far.max(axis=2).min()
         print(f"t_close <= t_far : {t_close <= t_far}")
         print(f"Intersezione close: {line(t_close)}")
         print(f"Intersezione far: {line(t_far)}")
 
 
-# %%
+
 class Absorber(Paralleogram):
     """
     Absorber _summary_
