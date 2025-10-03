@@ -134,9 +134,9 @@ class Line:
         Returns:
             _type_: _description_
         """
-        _vx = np.cos(self.phi) * np.cos(self.theta)
-        _vy = np.cos(self.phi) * np.sin(self.theta)
-        _vz = np.sin(self.phi)
+        _vx = np.sin(self.theta) * np.cos(self.phi)
+        _vy = np.sin(self.theta) * np.sin(self.phi)
+        _vz = np.cos(self.theta)
         return np.array((_vx, _vy, _vz),dtype= float)
 
     def is_point_on_line(self, point: Point3D) -> bool:
