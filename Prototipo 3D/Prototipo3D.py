@@ -153,7 +153,7 @@ class Line:
         _vx = np.cos(self.phi) * np.cos(self.theta)
         _vy = np.cos(self.phi) * np.sin(self.theta)
         _vz = np.sin(self.phi)
-        return (_vx, _vy, _vz)
+        return np.array((_vx, _vy, _vz),dtype= float)
 
     def is_point_on_line(self, point: Point3D) -> bool:
         """
@@ -171,6 +171,22 @@ class Line:
         if _var1 == _var2 and _var1 == _var3:
             return True
         return False
+
+    def __call__(self, parameter: float) -> Point3D:
+        '''
+        Restituisce un punto p in cui viene risolta 
+        l'equazione parametrica vettoriale:
+        point = d_vector * parameter + originpos 
+
+        Args:
+            parameter (float): parametro
+
+        Returns:
+            Point3D: _description_
+        '''
+        _point = self.d_vector * parameter + self.originpos.np_cord
+        # da cambiare per avere 
+        return Point3D(_point[0],_point[1],_point[3]) 
 
 
 # %%
@@ -277,7 +293,7 @@ class Paralleogram:
         """
         intersect_with_line:
         Slab Method AABB
-        Syntax from Wikepedia
+        Syntax from Wikepedia: https://en.wikipedia.org/wiki/Slab_method
 
         Args:
             line (Line): _description_
@@ -290,7 +306,10 @@ class Paralleogram:
         cord_high = np.divide(
             self.vertex2.np_cord - line.originpos.np_cord, line.d_vector
         )
-        
+        cord_close_far = np.dstack((cord_low,cord_high))
+        t_close = cord_close_far.min(axis=2).max()
+        t_far = cord_close_far.max(axis=2).mix()
+
 
 # %%
 class Absorber(Paralleogram):
