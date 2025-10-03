@@ -1,14 +1,15 @@
+"""
+Pasquale Napoli
+"""
 
-'''
-Pasquale Napoli 
-'''
 from typing import Any
 import random as rng
 import numpy as np
+from loguru import logger
+
 # import matplotlib.pylab as plt
 
 DIMENSION_RESOLUTION = 1e-4
-
 
 
 class Point3D:
@@ -20,11 +21,12 @@ class Point3D:
        cord_y : float
        cord_z : float
     """
-    def __init__(self,cord_x,cord_y,cord_z) -> None:
+
+    def __init__(self, cord_x, cord_y, cord_z) -> None:
         self.cord_x = cord_x
         self.cord_y = cord_y
         self.cord_z = cord_z
-        self.np_cord = np.array([cord_x,cord_y,cord_z],dtype= float)
+        self.np_cord = np.array([cord_x, cord_y, cord_z], dtype=float)
 
     def magnitude(self) -> Any:
         """
@@ -88,7 +90,7 @@ class Point3D:
         return _points[index]
 
     def __str__(self) -> str:
-        return f"Point3D\n x:{self.cord_x} y:{self.cord_y} z:{self.cord_z}"
+        return f"Point3D: x:{self.cord_x} y:{self.cord_y} z:{self.cord_z}"
 
 
 class Line:
@@ -137,7 +139,7 @@ class Line:
         _vx = np.sin(self.theta) * np.cos(self.phi)
         _vy = np.sin(self.theta) * np.sin(self.phi)
         _vz = np.cos(self.theta)
-        return np.array((_vx, _vy, _vz),dtype= float)
+        return np.array((_vx, _vy, _vz), dtype=float)
 
     def is_point_on_line(self, point: Point3D) -> bool:
         """
@@ -157,20 +159,19 @@ class Line:
         return False
 
     def __call__(self, parameter: float) -> Point3D:
-        '''
-        Restituisce un punto p in cui viene risolta 
+        """
+        Restituisce un punto p in cui viene risolta
         l'equazione parametrica vettoriale:
-        point = d_vector * parameter + originpos 
+        point = d_vector * parameter + originpos
 
         Args:
             parameter (float): parametro
 
         Returns:
             Point3D: _description_
-        '''
+        """
         _point = self.d_vector * parameter + self.originpos.np_cord
-        return Point3D(_point[0],_point[1],_point[2])
-
+        return Point3D(_point[0], _point[1], _point[2])
 
 
 class Particle(Line):
@@ -208,7 +209,6 @@ class Particle(Line):
         # vedere se decade in qualche modo
 
 
-
 class Muon(Particle):
     """
     Muon _summary_
@@ -226,7 +226,6 @@ class Muon(Particle):
         self.charge = -1
 
 
-
 class Paralleogram:
     """
     _summary_
@@ -239,8 +238,8 @@ class Paralleogram:
         self.pos_x = 0.0
         self.pos_y = 0.0
         self.pos_z = 0.0
-        self.set_position((0,0,0))
-        self.set_dimensions(0,0,0)
+        self.set_position((0, 0, 0))
+        self.set_dimensions(0, 0, 0)
 
     def set_position(self, point: tuple) -> None:
         """
@@ -252,7 +251,7 @@ class Paralleogram:
         self.pos_x = point[0]
         self.pos_y = point[1]
         self.pos_z = point[2]
-        self.vertex1 = Point3D(self.pos_x,self.pos_y,self.pos_z)
+        self.vertex1 = Point3D(self.pos_x, self.pos_y, self.pos_z)
 
     def set_dimensions(self, dir_x: float, dir_y: float, dir_z: float) -> None:
         """
@@ -267,9 +266,7 @@ class Paralleogram:
         self.dir_y = dir_y
         self.dir_z = dir_z
         self.vertex2 = Point3D(
-            self.pos_x + self.dir_x,
-            self.pos_y + self.dir_y,
-            self.pos_z + self.dir_z
+            self.pos_x + self.dir_x, self.pos_y + self.dir_y, self.pos_z + self.dir_z
         )
 
     def intersect_with_line(self, line: Line):
@@ -281,21 +278,18 @@ class Paralleogram:
         Args:
             line (Line): _description_
         """
-        # x_cord_1 = (self.pos_x - line.originpos.cord_x)/line.d_vector[0]
-        # x_cord_2 = (self.pos_x + self.dir_x - line.originpos.cord_x) / line.d_vector[0]
-        # x_close = np.min((x_cord_1, x_cord_2))
-        # x_far = np.max((x_cord_1, x_cord_2))
-        cord_low = np.divide(self.vertex1.np_cord - line.originpos.np_cord,line.d_vector)
-        cord_high = np.divide(
-            self.vertex2.np_cord - line.originpos.np_cord, line.d_vector
-        )
-        cord_close_far = np.dstack((cord_low,cord_high))
+        _d_vector = np.where(line.d_vector == 0.0, 1e-12, line.d_vector)
+        cord_low = np.divide(self.vertex1.np_cord - line.originpos.np_cord, _d_vector)
+        cord_high = np.divide(self.vertex2.np_cord - line.originpos.np_cord, _d_vector)
+        cord_close_far = np.dstack((cord_low, cord_high))
         t_close = cord_close_far.min(axis=2).max()
         t_far = cord_close_far.max(axis=2).min()
-        print(f"t_close <= t_far : {t_close <= t_far}")
-        print(f"Intersezione close: {line(t_close)}")
-        print(f"Intersezione far: {line(t_far)}")
-
+        logger.debug(f"t_close <= t_far : {t_close <= t_far}")
+        logger.debug(f"Intersezione close: {line(t_close)}")
+        logger.debug(f"Intersezione far: {line(t_far)}")
+        if t_close <= t_far:
+            return [True, [line(t_close), line(t_far)]]
+        return [False, [None, None]]
 
 
 class Absorber(Paralleogram):
