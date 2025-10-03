@@ -185,7 +185,6 @@ class Line:
             Point3D: _description_
         '''
         _point = self.d_vector * parameter + self.originpos.np_cord
-        # da cambiare per avere 
         return Point3D(_point[0],_point[1],_point[3]) 
 
 
@@ -309,6 +308,9 @@ class Paralleogram:
         cord_close_far = np.dstack((cord_low,cord_high))
         t_close = cord_close_far.min(axis=2).max()
         t_far = cord_close_far.max(axis=2).mix()
+        print(f"t_close <= t_far : {t_close <= t_far}")
+        print(f"Intersezione close: {line(t_close)}")
+        print(f"Intersezione far: {line(t_far)}")
 
 
 # %%
