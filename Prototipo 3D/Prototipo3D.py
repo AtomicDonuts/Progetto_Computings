@@ -175,6 +175,17 @@ class Line:
         _point = self.d_vector * parameter + self.originpos.np_cord
         return Point3D(_point[0], _point[1], _point[2])
 
+    def obj3d(self,lin_array: np.ndarray):
+        '''
+        obj3d _summary_
+
+        Returns:
+            _type_: _description_
+        '''
+        arr_x = self.d_vector[0] * lin_array + self.originpos.cord_x
+        arr_y = self.d_vector[1] * lin_array + self.originpos.cord_y
+        arr_z = self.d_vector[2] * lin_array + self.originpos.cord_z
+        return np.array([arr_x,arr_y,arr_z])
 
 class Particle(Line):
     """
@@ -290,7 +301,11 @@ class Parallelepiped:
             self.pos_x, self.pos_y + self.dir_y, self.pos_z + self.dir_z
         )
 
-    def obj3d(self, *args: Any, **kwds: Any):
+    def obj3d(self,
+              face_colors="gray",
+              line_widths=1,
+              edge_colors="k",
+              alpha_graph=0.1):
         """
         ritorna l'oggetto 3d in modo che matplotlib lo possa plottare
         utilizzando ax.add_collection3d(xxxx.obj3d())
@@ -341,7 +356,13 @@ class Parallelepiped:
             ],
         ]
 
-        poly3d = Poly3DCollection(faces, *args, *kwds)
+        poly3d = Poly3DCollection(
+            faces,
+            facecolors=face_colors,
+            linewidths=line_widths,
+            edgecolors=edge_colors,
+            alpha=alpha_graph,
+        )
         return poly3d
 
     def intersect_with_line(self, line: Line):
@@ -359,9 +380,9 @@ class Parallelepiped:
         cord_close_far = np.dstack((cord_low, cord_high))
         t_close = cord_close_far.min(axis=2).max()
         t_far = cord_close_far.max(axis=2).min()
-        logger.debug(f"t_close <= t_far : {t_close <= t_far}")
-        logger.debug(f"Intersezione close: {line(t_close)}")
-        logger.debug(f"Intersezione far: {line(t_far)}")
+        # logger.debug(f"t_close <= t_far : {t_close <= t_far}")
+        # logger.debug(f"Intersezione close: {line(t_close)}")
+        # logger.debug(f"Intersezione far: {line(t_far)}")
         if t_close <= t_far:
             return [True, [line(t_close), line(t_far)]]
         return [False, [None, None]]
