@@ -11,20 +11,19 @@ linea_z = lib.Muon()
 linea_z.originpos = lib.Point3D(0, 0, 0)
 linea_z.theta = 0.0
 linea_z.phi = 0.0
-linea_z.d_vector = linea_z._direction_vector()
+linea_z.d_vector = linea_z._direction_vector()  
 
 linea_x = lib.Muon()
 linea_x.originpos = lib.Point3D(0, 0, 0)
 linea_x.theta = np.pi / 2
 linea_x.phi = 0.0
-linea_x.d_vector = linea_x._direction_vector()
+linea_x.d_vector = linea_x._direction_vector()  
 
 linea_y = lib.Muon()
 linea_y.originpos = lib.Point3D(0, 0, 0)
 linea_y.theta = np.pi / 2
 linea_y.phi = np.pi / 2
 linea_y.d_vector = linea_y._direction_vector()
-
 fig = plt.figure(figsize=(8, 6))
 ax = fig.add_subplot(111, projection="3d")
 ax.quiver(
