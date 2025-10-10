@@ -175,17 +175,18 @@ class Line:
         _point = self.d_vector * parameter + self.originpos.np_cord
         return Point3D(_point[0], _point[1], _point[2])
 
-    def obj3d(self,lin_array: np.ndarray):
-        '''
+    def obj3d(self, lin_array: np.ndarray):
+        """
         obj3d _summary_
 
         Returns:
             _type_: _description_
-        '''
+        """
         arr_x = self.d_vector[0] * lin_array + self.originpos.cord_x
         arr_y = self.d_vector[1] * lin_array + self.originpos.cord_y
         arr_z = self.d_vector[2] * lin_array + self.originpos.cord_z
-        return np.array([arr_x,arr_y,arr_z])
+        return np.array([arr_x, arr_y, arr_z])
+
 
 class Particle(Line):
     """
@@ -301,11 +302,9 @@ class Parallelepiped:
             self.pos_x, self.pos_y + self.dir_y, self.pos_z + self.dir_z
         )
 
-    def obj3d(self,
-              face_colors="gray",
-              line_widths=1,
-              edge_colors="k",
-              alpha_graph=0.1):
+    def obj3d(
+        self, face_colors="gray", line_widths=1, edge_colors="k", alpha_graph=0.1
+    ):
         """
         ritorna l'oggetto 3d in modo che matplotlib lo possa plottare
         utilizzando ax.add_collection3d(xxxx.obj3d())
