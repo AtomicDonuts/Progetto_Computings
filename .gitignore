@@ -210,5 +210,6 @@ __marimo__/
 *.ipynb 
 
 #Custom
-xml_importation/gll_psc_v32.xml
-
+*.xml
+*.fit
+*.csv 
