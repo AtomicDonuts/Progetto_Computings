@@ -53,70 +53,7 @@ def xml_to_pandas(xml_file_path):
     return df
 
 
-def save_to_root_classic(df, output_filename):
-    """
-    Converte il DataFrame in TTree.
-    """
-    print(f"Creazione file ROOT: {output_filename}")
-
-    tfile = ROOT.TFile(output_filename, "RECREATE")
-    tree = ROOT.TTree("FermiCatalog", "Catalogo sorgenti Fermi-LAT")
-
-    # Dizionari per mantenere i puntatori ai buffer per C++
-    buffers = {}
-
-    print("Configurazione dei Branch...")
-
-    for col in df.columns:
-        numeric_series = pd.to_numeric(df[col], errors="coerce")
-
-        if not numeric_series.isna().all():
-            # Tipo: Numerico (Float/Double)
-            df[col] = numeric_series.fillna(np.nan)
-            buffers[col] = array("d", [0.0])
-            tree.Branch(col, buffers[col], f"{col}/D")
-        else:
-            # Tipo: Stringa (Testo)
-            df[col] = df[col].astype(str).fillna("")
-            buffers[col] = ROOT.std.string("")
-            tree.Branch(col, buffers[col])
-
-    # --- Riempimento del Tree ---
-    print(f"Riempimento del Tree con {len(df)} sorgenti...")
-
-    for row in df.itertuples(index=False):
-        for col_name in df.columns:
-            val = getattr(row, col_name)
-
-            if isinstance(buffers[col_name], ROOT.std.string):
-                # Assegnazione stringa C++
-                buffers[col_name].assign(str(val))
-            else:
-                # Assegnazione numero
-                buffers[col_name][0] = float(val)
-
-        tree.Fill()
-
-    # --- Salvataggio ---
-    tfile.Write()
-    tfile.Close()
-    print("File salvato e chiuso correttamente.")
-
-file_xml = "gll_psc_v32.xml"
-file_root = "gll_psc_v32.root"
+file_xml = "./gll_psc_v32.xml"
 
 
-# 1. XML -> Pandas
-df_data = xml_to_pandas(file_xml)
-
-if df_data is not None:
-    # 2. Pandas -> ROOT (Metodo Classico TTree)
-    save_to_root_classic(df_data, file_root)
-
-    # Verifica rapida
-    print("\nVerifica lettura file:")
-    f = ROOT.TFile.Open(file_root)
-    t = f.Get("FermiCatalog")
-    print(f"Sorgenti salvate nel TTree: {t.GetEntries()}")
-
-df_data.to_csv("gll_psc_v32.csv")
+df_data = xml_to_pandas(file_xml).to_csv("gll_psc_v32.csv")
