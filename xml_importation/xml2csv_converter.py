@@ -1,9 +1,5 @@
 import xml.etree.ElementTree as ET
 import pandas as pd
-import numpy as np
-import ROOT
-from array import array
-
 
 def xml_to_pandas(xml_file_path):
     """ """
@@ -18,7 +14,6 @@ def xml_to_pandas(xml_file_path):
 
     all_sources = []
 
-    # 1. Parsing e Appiattimento (Flattening)
     for source in root.findall("source"):
         source_data = {}
 
@@ -52,8 +47,6 @@ def xml_to_pandas(xml_file_path):
     df[col] = df[col].apply(pd.to_numeric)
     return df
 
-
 file_xml = "./gll_psc_v32.xml"
 
-
-df_data = xml_to_pandas(file_xml).to_csv("gll_psc_v32.csv")
+df_data = xml_to_pandas(file_xml).to_csv("gll_psc_v32.csv") # pyright: ignore[reportOptionalMemberAccess]
