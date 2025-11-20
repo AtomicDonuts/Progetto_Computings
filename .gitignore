@@ -214,3 +214,5 @@ __marimo__/
 *.fit
 *.csv 
 *.root
+*.reg
+.vscode/settings.json
