@@ -21,11 +21,11 @@ def xml_to_pandas(xml_file_path=custom_paths.xml_path):
     Le informazioni esterne a "source" sono aggiunte in colonne
     apposite che iniziano 'spectrum_' e 'spatial_'.
     Args:
-        xml_file_path (_type_): Path del catalogo in formato .xml
+        xml_file_path (srt,pathlib.Path): Path del catalogo in formato .xml
         il default è definito del file "custom_variables.py"
 
     Returns:
-        Pandas DataBase del Catalogo.
+        pandas.DataFrame: Pandas DataBase del Catalogo.
     """
     logger.info(f"Parsing XML: {xml_file_path}...")
     # Con queste parole si escludono delle colonne che sono costanti
@@ -36,7 +36,7 @@ def xml_to_pandas(xml_file_path=custom_paths.xml_path):
         tree = ET.parse(xml_file_path)
         root = tree.getroot()
     except Exception as e:
-        logger.error(f"Errore parsing XML: {e}")
+        logger.error(f"Errore inaspettato: {e}")
         return pd.DataFrame(all_sources)
 
     for source in root.findall("source"):
