@@ -23,7 +23,7 @@ if Path("../xml_importation").exists():
 else:
     raise FileNotFoundError("'../xml_importation' not found.")
 if Path("../files").exists():
-    dir_xml_path = Path("../files")
+    dir_files_path = Path("../files")
 else:
     raise FileNotFoundError("'../files' not found.")
 
