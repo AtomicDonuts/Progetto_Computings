@@ -37,9 +37,22 @@ def xml_to_pandas(xml_file_path=custom_paths.xml_path):
     try:
         tree = ET.parse(xml_file_path)
         root = tree.getroot()
-    except Exception as e:
-        logger.error(f"Errore inaspettato: {e}")
+    except FileNotFoundError:
+        logger.error(f"Errore: Il file '{xml_file_path}' non è stato trovato.")
         return pd.DataFrame(all_sources)
+
+    except PermissionError:
+        logger.error(f"Errore: Permessi insufficienti per leggere '{xml_file_path}'.")
+        return pd.DataFrame(all_sources)
+
+    except ET.ParseError as e:
+        logger.error(f"Errore di sintassi XML nel file: {e}")
+        return pd.DataFrame(all_sources)
+
+    except Exception as e:
+        logger.error(f"Si è verificato un errore imprevisto: {e}")
+        return pd.DataFrame(all_sources)
+
 
     for source in root.findall("source"):
         source_data = {}
