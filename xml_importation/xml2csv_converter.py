@@ -1,5 +1,5 @@
 """
-Script che converte il catalogo xml in un database di pandas.
+Cconverte il catalogo xml in un database di pandas.
 Se eseguito restituisce il catalogo convertito in csv nel Path
 di output scelto
 """
@@ -79,7 +79,7 @@ def xml_to_pandas(xml_file_path=custom_paths.xml_path):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-             description="Script che converte il catalogo xml in un file csv.")
+             description="Converte il catalogo xml in un file csv.")
     parser.add_argument("--input_path",
                         "-i",
                         default=f"{custom_paths.xml_path}",

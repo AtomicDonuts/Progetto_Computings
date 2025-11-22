@@ -1,11 +1,9 @@
 '''
-Moduletto Python per la definizione di alcune variabili globali.
------------------------
+Definizione di alcune variabili globali.
 Deve essere importato nei vari script utilizzando la seguente sintassi:
 import sys
 sys.path.append("../imports/")
 from custom_variables import *
------------------------
 '''
 from pathlib import Path
 
