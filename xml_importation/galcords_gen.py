@@ -1,5 +1,6 @@
 ''' 
-Converte da Coordinate Equatoriali in Coordinate Galattiche il database
+Genera un database nuovo con nome delle sorgenti e le loro cordinate galattiche
+partendo da un database csv generato da xml2csv_converter.py.
 '''
 import sys
 import pandas as pd
