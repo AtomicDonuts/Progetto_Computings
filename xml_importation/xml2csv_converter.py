@@ -89,5 +89,5 @@ if __name__ == "__main__":
                         default=f"{custom_paths.csv_path}",
                         help="Path di output del database in csv.")
     args = parser.parse_args()
-    df_data = xml_to_pandas(args.input_path).to_csv(args.output_path)
+    df_data = xml_to_pandas(args.input_path).to_csv(args.output_path,index = False)
     logger.info(f"{custom_paths.Path(args.output_path).resolve()} saved.")
