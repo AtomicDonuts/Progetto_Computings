@@ -3,10 +3,12 @@ Cconverte il catalogo xml in un database di pandas.
 Se eseguito restituisce il catalogo convertito in csv nel Path
 di output scelto
 """
+
 import argparse
 import sys
-import pandas as pd
 import xml.etree.ElementTree as ET
+
+import pandas as pd
 from loguru import logger
 
 # Import del modulo che contiene le variabili e i path della repository
@@ -79,15 +81,20 @@ def xml_to_pandas(xml_file_path=custom_paths.xml_path):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-             description="Converte il catalogo xml in un file csv.")
-    parser.add_argument("--input_path",
-                        "-i",
-                        default=f"{custom_paths.xml_path}",
-                        help="Path del cataologo in xml.")
-    parser.add_argument("--output_path",
-                        "-o",
-                        default=f"{custom_paths.csv_path}",
-                        help="Path di output del database in csv.")
+        description="Converte il catalogo xml in un file csv."
+    )
+    parser.add_argument(
+        "--input_path",
+        "-i",
+        default=f"{custom_paths.xml_path}",
+        help="Path del cataologo in xml.",
+    )
+    parser.add_argument(
+        "--output_path",
+        "-o",
+        default=f"{custom_paths.csv_path}",
+        help="Path di output del database in csv.",
+    )
     args = parser.parse_args()
-    df_data = xml_to_pandas(args.input_path).to_csv(args.output_path,index = False)
+    df_data = xml_to_pandas(args.input_path).to_csv(args.output_path, index=False)
     logger.info(f"{custom_paths.Path(args.output_path).resolve()} saved.")
