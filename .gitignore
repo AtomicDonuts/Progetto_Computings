@@ -217,3 +217,4 @@ __marimo__/
 *.reg
 *.html
 .vscode/settings.json
+map/map_tests.py
