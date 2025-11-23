@@ -30,3 +30,4 @@ else:
 xml_path = Path("../files/gll_psc_v32.xml")
 csv_path = Path("../files/gll_psc_v32.csv")
 gmap_path = Path("../files/galattic_coordinates.csv")
+htmlmap_path = Path("../files/galactic_map.html")
