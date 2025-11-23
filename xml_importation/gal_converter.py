@@ -13,7 +13,7 @@ sys.path.append("../imports/")
 import custom_variables as custom_paths
 
 
-def equatorial_to_galattic(
+def equatorial_to_galactic(
     catalog_path=custom_paths.csv_path,
     output_path=custom_paths.csv_path,
     keep_old_cord=False,
@@ -22,7 +22,7 @@ def equatorial_to_galattic(
     path_only_cord = custom_paths.gmap_path
 ):
     """
-    equatorial_to_galattic
+    equatorial_to_galactic
     Converte le coordinate equatoriali del dataframe in input in coordinate galattiche.
     Se non specificato, le colonne con le coordinate equatoriali sono poi rimosse.
     Di default il dataframe viene poi salvato in custom_path.csv_path oltre che ritornato
@@ -68,14 +68,15 @@ def equatorial_to_galattic(
             " o potresti aver aperto il file sbagliato.")
         return dataframe
 
-    dataframe["RA_deg"]  = dataframe.apply(lambda row: row["RA_deg"]  * u.deg, axis=1)  
-    dataframe["DEC_deg"] = dataframe.apply(lambda row: row["DEC_deg"] * u.deg, axis=1)
+    # pylint: disable=no-member
     c_galactic = SkyCoord(
-        ra=dataframe["RA_deg"], dec=dataframe["DEC_deg"], frame="icrs"
+        ra= dataframe["RA_deg" ].values * u.deg,
+        dec=dataframe["DEC_deg"].values * u.deg,
+        frame="icrs",
     ).galactic
     dataframe["BII"]  = c_galactic.l.degree  # type: ignore
     dataframe["LII"] = c_galactic.b.degree # type: ignore
-
+    
     if keep_old_cord:
         drop_col = ["RA_deg", "DEC_deg"]
     else:
@@ -115,6 +116,6 @@ if __name__ == "__main__":
         help="Path di output del database con solo il nome e le coordinate galattiche.",
     )
     args = parser.parse_args()
-    equatorial_to_galattic(catalog_path=args.input_path,
+    equatorial_to_galactic(catalog_path=args.input_path,
                            output_path=args.output_path,
                            path_only_cord=custom_paths.Path(args.maps_path))
