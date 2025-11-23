@@ -1,10 +1,11 @@
-'''
+"""
 Definizione di alcune variabili globali.
 Deve essere importato nei vari script utilizzando la seguente sintassi:
 import sys
 sys.path.append("../imports/")
-from custom_variables import *
-'''
+import custom_variables as custom_paths
+"""
+
 from pathlib import Path
 
 # Folders
