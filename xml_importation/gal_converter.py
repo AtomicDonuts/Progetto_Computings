@@ -48,14 +48,16 @@ def equatorial_to_galactic(
         che ha le colonne 'name','BII','LII'. Defaults to {custom_paths.gmap_path}.
 
     Returns:
-        _type_: _description_
+        pandas.DataFrame: DataFrame con le coordinate convertite.
     """
 
     if input_dataframe is None:
+        logger.info(f"Loading from {catalog_path}")
         dataframe = pd.read_csv(catalog_path)
     else:
         if catalog_path != custom_paths.csv_path:
             logger.warning("'input_dataframe' detected, 'catalog_path' will be ignored.")
+        logger.info("Loading DataFrame from input")
         dataframe = input_dataframe
 
     try:
@@ -66,6 +68,7 @@ def equatorial_to_galactic(
         logger.error(
             f"KeyError: {exception}.\nProbabilmente il file è stato già convertito"\
             " o potresti aver aperto il file sbagliato.")
+        logger.info("Returning the original dataframe.")
         return dataframe
 
     # pylint: disable=no-member
@@ -74,20 +77,22 @@ def equatorial_to_galactic(
         dec=dataframe["DEC_deg"].values * u.deg,
         frame="icrs",
     ).galactic
-    dataframe["BII"]  = c_galactic.l.degree  # type: ignore
-    dataframe["LII"] = c_galactic.b.degree # type: ignore
-    
+    dataframe["BII"]  = c_galactic.l.degree  
+    dataframe["LII"] = c_galactic.b.degree
+
     if keep_old_cord:
         drop_col = ["RA_deg", "DEC_deg"]
     else:
         drop_col = [col for col in dataframe.columns if "RA" in col or "DEC" in col]
 
     if path_only_cord.name != '':
+        logger.info(f"Saving the cordinate only file at {path_only_cord}")
         dataframe[["name", "BII", "LII"]].to_csv(path_only_cord, index=False)
 
     dataframe = dataframe.drop(drop_col, axis=1)
 
     if save_as_file:
+        logger.info(f"Saving dataframe to {output_path} ...")
         dataframe.to_csv(output_path, index=False)
     return dataframe
 
