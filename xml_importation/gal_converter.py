@@ -24,39 +24,7 @@ def equatorial_to_galattic(
         dataframe = dataframe_input
 
     else:
-        try:
-            dataframe = pd.read_csv(catalog_path)
-
-        except FileNotFoundError:
-            logger.error(
-                f"Errore: Il file '{catalog_path}' non è stato trovato. Controlla il percorso."
-            )
-            return None
-
-        except PermissionError:
-            logger.error("Errore: Permesso negato.")
-            return None
-
-        except pd.errors.EmptyDataError:
-            logger.error("Errore: Il file è vuoto (nessun dato o colonna).")
-            return None
-
-        except pd.errors.ParserError as exception:
-            logger.error(
-                f"Errore di parsing: Il formato del CSV non è valido. Dettagli: {exception}"
-            )
-            return None
-
-        except UnicodeDecodeError:
-            logger.error(
-                "Errore di codifica: Prova a cambiare encoding (es. 'latin-1' o 'cp1252')."
-            )
-            return None
-
-        except Exception as exception:
-            logger.error(f"Si è verificato un errore imprevisto: {exception}")
-            return None
-
+        dataframe = pd.read_csv(catalog_path)
     try:
         dataframe["RA_deg"] = dataframe["spatial_RA_value"].fillna(dataframe["RA"])
         dataframe["DEC_deg"] = dataframe["spatial_DEC_value"].fillna(dataframe["DEC"])
