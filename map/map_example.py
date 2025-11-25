@@ -40,21 +40,35 @@ def fig_generator(
                 "'input_dataframe' detected, 'catalog_path' will be ignored.")
         logger.info("Loading DataFrame from input")
         dataframe = input_dataframe
-
-    fig = px.scatter_geo(
-        dataframe,
-        lat="LII",
-        lon="BII",
-        #color="type",
-        hover_name="name",
-        hover_data={
-            "BII": False,
-            "LII": False,
-        },
-        projection="mollweide",
-        title="Sky Map",
-        basemap_visible=False
-    )
+    try:
+        fig = px.scatter_geo(
+            dataframe,
+            lat="GLAT",
+            lon="GLON",
+            color="CLASS1",
+            hover_name="Source_Name",
+            hover_data={
+                "GLON": False,
+                "GLAT": False,
+            },
+            projection="mollweide",
+            title="Sky Map",
+            basemap_visible=False,
+        )
+    except ValueError:
+        fig = px.scatter_geo(
+            dataframe,
+            lat="GLAT",
+            lon="GLON",
+            hover_name="Source_Name",
+            hover_data={
+                "GLON": False,
+                "GLAT": False,
+            },
+            projection="mollweide",
+            title="Sky Map",
+            basemap_visible=False,
+        )
 
     fig.update_geos(showframe=True)
 
@@ -98,4 +112,3 @@ if __name__ == "__main__":
         catalog_path=custom_paths.csv_path,
         html_output=custom_paths.htmlmap_path
     )
-    

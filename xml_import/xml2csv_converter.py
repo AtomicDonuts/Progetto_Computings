@@ -36,7 +36,7 @@ def xml_to_pandas(xml_file_path=custom_paths.xml_path):
 
     tree = ET.parse(xml_file_path)
     root = tree.getroot()
-    
+
     for source in root.findall("source"):
         source_data = {}
 
@@ -72,6 +72,7 @@ def xml_to_pandas(xml_file_path=custom_paths.xml_path):
     exclude_col = ["name", "type", "spectrum_type", "spatialModel_type"]
     col = df.columns.drop(exclude_col)
     df[col] = df[col].apply(pd.to_numeric)
+    df = df.rename({"name":"Source_Name"},axis=1)
     return df
 
 

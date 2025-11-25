@@ -36,7 +36,7 @@ def equatorial_to_galactic(
         {custom_paths.csv_path}.
 
         keep_old_cord (bool, optional): Ritorna il dataframe originale con appese due colonne
-        contenenti le coordinate galattiche (LII,BII). Defaults to False.
+        contenenti le coordinate galattiche (GLON,GLAT). Defaults to False.
 
         input_dataframe (pandas.DataFrame, optional): Se fornito, ignora il path del catalogo
         e utilizza il dataframe come input.
@@ -45,7 +45,7 @@ def equatorial_to_galactic(
         path di output. Defaults to True.
 
         path_only_cord (str,pathlib.Path, optional): Salva nel path fornito un database
-        che ha le colonne 'name','BII','LII'. Defaults to {custom_paths.gmap_path}.
+        che ha le colonne 'name','GLAT','GLON'. Defaults to {custom_paths.gmap_path}.
 
     Returns:
         pandas.DataFrame: DataFrame con le coordinate convertite.
@@ -77,8 +77,8 @@ def equatorial_to_galactic(
         dec=dataframe["DEC_deg"].values * u.deg,
         frame="icrs",
     ).galactic
-    dataframe["BII"]  = c_galactic.l.degree  
-    dataframe["LII"] = c_galactic.b.degree
+    dataframe["GLAT"]  = c_galactic.l.degree  
+    dataframe["GLON"]  = c_galactic.b.degree
 
     if keep_old_cord:
         drop_col = ["RA_deg", "DEC_deg"]
@@ -87,7 +87,7 @@ def equatorial_to_galactic(
 
     if path_only_cord.name != '':
         logger.info(f"Saving the cordinate only file at {path_only_cord}")
-        dataframe[["name", "BII", "LII"]].sort_values(by=['name']).to_csv(path_only_cord, index=False)
+        dataframe[["Source_Name", "GLAT", "GLON"]].sort_values(by=['Source_Name']).to_csv(path_only_cord, index=False)
 
     dataframe = dataframe.drop(drop_col, axis=1)
 
