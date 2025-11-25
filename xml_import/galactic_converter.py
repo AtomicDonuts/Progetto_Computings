@@ -87,7 +87,7 @@ def equatorial_to_galactic(
 
     if path_only_cord.name != '':
         logger.info(f"Saving the cordinate only file at {path_only_cord}")
-        dataframe[["name", "BII", "LII"]].to_csv(path_only_cord, index=False)
+        dataframe[["name", "BII", "LII"]].sort_values(by=['name']).to_csv(path_only_cord, index=False)
 
     dataframe = dataframe.drop(drop_col, axis=1)
 
