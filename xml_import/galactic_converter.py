@@ -77,8 +77,9 @@ def equatorial_to_galactic(
         dec=dataframe["DEC_deg"].values * u.deg,
         frame="icrs",
     ).galactic
-    dataframe["GLAT"]  = c_galactic.l.degree  
-    dataframe["GLON"]  = c_galactic.b.degree
+    # per qualche motivo che non mi è chiaro sono al contrario
+    dataframe["GLAT"]  = c_galactic.b.degree  
+    dataframe["GLON"]  = c_galactic.l.degree
 
     if keep_old_cord:
         drop_col = ["RA_deg", "DEC_deg"]
