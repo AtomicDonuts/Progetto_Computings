@@ -17,7 +17,7 @@ if Path("../map").exists():
     dir_map_path = Path("../map")
 else:
     raise FileNotFoundError("'../map' not found.")
-if Path("../xml_importation").exists():
+if Path("../xml_import").exists():
     dir_xml_path = Path("../xml_importation")
 else:
     raise FileNotFoundError("'../xml_importation' not found.")
