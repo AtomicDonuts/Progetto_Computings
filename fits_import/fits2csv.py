@@ -10,6 +10,7 @@ import sys
 from astropy.io import fits
 from astropy.table import Table
 from loguru import logger
+import numpy as np
 
 # Import del modulo che contiene le variabili e i path della repository
 sys.path.append("../imports/")
@@ -43,7 +44,12 @@ def fits_to_pandas(fits_file_path=custom_paths.fits_path):
             "Sqrt_TS_History",
         ]
     )
+    
     df = data.to_pandas()
+    df["CLASS_GENERIC"] = df["CLASS1"].str.capitalize()
+    df["CLASS_DESCRIPTION"] = np.where(
+        df["CLASS1"].str.isupper(), "Identified", "Associated"
+    )
     return df
 
 

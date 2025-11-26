@@ -45,12 +45,14 @@ def fig_generator(
             dataframe,
             lat="GLAT",
             lon="GLON",
-            color="CLASS1",
+            color="CLASS_GENERIC",
             hover_name="Source_Name",
             hover_data={
-                "GLON": False,
-                "GLAT": False,
-            },
+                "CLASS_GENERIC":True,
+                "CLASS_DESCRIPTION": True,
+                "GLAT":False,
+                "GLON":False,
+                },
             projection="mollweide",
             title="Sky Map",
             basemap_visible=False,
@@ -60,6 +62,7 @@ def fig_generator(
             dataframe,
             lat="GLAT",
             lon="GLON",
+            color="CLASS1",
             hover_name="Source_Name",
             hover_data={
                 "GLON": False,
@@ -103,12 +106,12 @@ if __name__ == "__main__":
     parser.add_argument(
         "--html_path",
         "-o",
-        default=f"{custom_paths.htmlmap_path}",
+        default=f"{custom_paths.docs_path}",
         help="Path di output del file html.",
     )
     args = parser.parse_args()
 
     fig_generator(
-        catalog_path=custom_paths.csv_path,
-        html_output=custom_paths.htmlmap_path
+        catalog_path=args.input_path,
+        html_output=args.html_path
     )
