@@ -106,7 +106,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--html_path",
         "-o",
-        default=f"{custom_paths.docs_path}",
+        default=f"{custom_paths.htmlmap_path}",
         help="Path di output del file html.",
     )
     args = parser.parse_args()
