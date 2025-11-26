@@ -14,7 +14,7 @@ import custom_variables as custom_paths
 def fig_generator(
         catalog_path=custom_paths.csv_path,
         input_dataframe=None,
-        html_output=custom_paths.htmlmap_path
+        html_output=custom_paths.map_path
 ):
     """
     fig_generator 
@@ -106,7 +106,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--html_path",
         "-o",
-        default=f"{custom_paths.htmlmap_path}",
+        default=f"{custom_paths.map_path}",
         help="Path di output del file html.",
     )
     args = parser.parse_args()
