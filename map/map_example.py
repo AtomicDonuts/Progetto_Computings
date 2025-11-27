@@ -48,6 +48,7 @@ def fig_generator(
             color="CLASS_GENERIC",
             hover_name="Source_Name",
             hover_data={
+                "J2000_Name":True,
                 "CLASS_GENERIC":True,
                 "CLASS_DESCRIPTION": True,
                 "GLAT":False,

@@ -33,6 +33,7 @@ def fits_to_pandas(fits_file_path=custom_paths.fits_path):
     Returns:
         pandas.DataFrame: Pandas DataBase del Catalogo.
     """
+    void_str = "                            "
     logger.info(f"Parsing FITS: {fits_file_path}...")
     data = fits.getdata(fits_file_path, ext=1)
     data = Table(data)
@@ -47,11 +48,17 @@ def fits_to_pandas(fits_file_path=custom_paths.fits_path):
             "Sqrt_TS_History",
         ]
     )
-    
+
     df = data.to_pandas()
     df["CLASS_GENERIC"] = df["CLASS1"].str.capitalize()
     df["CLASS_DESCRIPTION"] = np.where(
         df["CLASS1"].str.isupper(), "Identified", "Associated"
+    )
+    df["J2000_Name"] = df["Source_Name"]
+    df["Source_Name"] = np.where(
+        df["ASSOC1"] == void_str,
+        df["Source_Name"],
+        df["ASSOC1"],
     )
     return df
 
