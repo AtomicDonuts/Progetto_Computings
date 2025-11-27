@@ -1,7 +1,10 @@
 """
 Converte il catalogo fits in un database di pandas.
 Se eseguito restituisce il catalogo convertito in csv nel Path
-di output scelto
+di output scelto.
+
+Al momento restituisce un DataFrame per creare la mappa.
+Le colonne scelte saranno poi aggiustate in futuro.
 """
 
 import argparse
