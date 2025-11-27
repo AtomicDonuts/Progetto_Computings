@@ -1,3 +1,9 @@
+---
+layout: page
+title: Brainstorm
+permalink: /ann/
+---
+
 Modello di Machine Learning:
 Servono dei dei dati su cui allenarlo, perchè usare il catalogo non è il migliore dei modi:
 Due idee
