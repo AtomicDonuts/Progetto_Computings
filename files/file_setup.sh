@@ -1,0 +1,2 @@
+#wget https://fermi.gsfc.nasa.gov/ssc/data/access/lat/14yr_catalog/gll_psc_v32.xml -O ./gll_psc_v32.xml
+wget https://fermi.gsfc.nasa.gov/ssc/data/access/lat/14yr_catalog/gll_psc_v35.fit -O ./gll_psc_v35.fit
