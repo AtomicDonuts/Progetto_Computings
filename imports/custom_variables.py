@@ -86,7 +86,7 @@ code_to_name = {
     "GAL": "Galaxy",
     "NOV": "Nova",
     "SFR": "Star-Forming Regions",
-    "GC": "Galattic Center",
-    "UNK": "Uknown",
+    "GC": "Galactic Center",
+    "UNK": "Unknown",
     "": "No Association",
 }
