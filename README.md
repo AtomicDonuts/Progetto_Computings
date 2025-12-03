@@ -13,4 +13,4 @@ Il file non è ancora compilato tramite Action.
 ### Modello Rete Neurale
 [WIP]
 
-[Qui](https://atomicdonuts.github.io/Progetto_Computings/ann/brainstorm) ci sono alcune idee a riguardo. 
+[Qui](https://atomicdonuts.github.io/Progetto_Computings/ann/). 
