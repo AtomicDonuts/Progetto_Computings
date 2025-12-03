@@ -49,7 +49,7 @@ def fig_generator(
             hover_name="Source_Name",
             hover_data={
                 "J2000_Name":True,
-                "CLASS_GENERIC":True,
+                "CLASS_TYPE":True,
                 "CLASS_DESCRIPTION": True,
                 "GLAT":False,
                 "GLON":False,
