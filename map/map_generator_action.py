@@ -1,13 +1,25 @@
 """
 Questo modulo genera la mappa a partire da file FITS, per la GitHub Action
 """
+# pylint: disable=import-error , wrong-import-position
+from pathlib import Path
 import sys
-sys.path.append("../imports/")
-sys.path.append("../fits_import/")
 
-# pylint: disable=import-error
-# pylint: disable=wrong-import-position
+git_dir = None
+for i in Path(__file__).parents:
+    for j in i.iterdir():
+        if ".git" in j.as_posix() and j.is_dir():
+            git_dir = i
+if git_dir is None:
+    raise FileNotFoundError(
+        "Git Directory Not Found. Please ensure that you cloned the repository in the right way."
+    )
+import_dir = git_dir / "imports/"
+sys.path.append(import_dir.as_posix())
+
 import custom_variables as custom_paths
+sys.path.append(custom_paths.dir_fits_import_path.as_posix())
+sys.path.append(custom_paths.dir_map_path.as_posix())
 import fits2csv as fit_fun
 import map_example as map_fun
 
