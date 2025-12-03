@@ -19,11 +19,6 @@ if Path("../map").exists():
 else:
     raise FileNotFoundError("'../map' not found.")
 
-if Path("../xml_import").exists():
-    dir_xml_path = Path("../xml_import")
-else:
-    raise FileNotFoundError("'../xml_import' not found.")
-
 if Path("../files").exists():
     dir_files_path = Path("../files")
 else:
@@ -40,7 +35,6 @@ else:
     raise FileNotFoundError("'../ann' not found.")
 
 # Files
-xml_path = Path("../files/gll_psc_v32.xml")
 fits_path = Path("../files/gll_psc_v35.fit")
 csv_path = Path("../files/gll_psc.csv")
 gmap_path = Path("../files/galattic_coordinates.csv")
