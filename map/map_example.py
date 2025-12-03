@@ -74,7 +74,9 @@ def fig_generator(
             basemap_visible=False,
         )
 
-    fig.update_geos(showframe=True)
+    fig.update_geos(showframe=True,
+                    lataxis_showgrid=True,
+                    lonaxis_showgrid=True)
 
     fig.update_traces(
         marker=dict(
