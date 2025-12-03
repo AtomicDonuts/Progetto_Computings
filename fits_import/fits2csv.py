@@ -33,7 +33,6 @@ def fits_to_pandas(fits_file_path=custom_paths.fits_path):
     Returns:
         pandas.DataFrame: Pandas DataBase del Catalogo.
     """
-    void_str = "                            "
     logger.info(f"Parsing FITS: {fits_file_path}...")
     data = fits.getdata(fits_file_path, ext=1)
     data = Table(data)
@@ -50,16 +49,19 @@ def fits_to_pandas(fits_file_path=custom_paths.fits_path):
     )
 
     df = data.to_pandas()
-    df["CLASS_TYPE"] = df["CLASS1"].str.strip().str.upper()
+    df[df.select_dtypes(["object"]).columns] = df.select_dtypes(["object"]).apply(
+        lambda x: x.str.strip()
+    )
+    df["CLASS_TYPE"] = df["CLASS1"].str.upper()
     df["CLASS_DESCRIPTION"] = np.where(
         df["CLASS1"].str.isupper(), "Identified", "Associated"
     )
     df["CLASS_GENERIC"] = df["CLASS_TYPE"].replace(custom_paths.code_to_name)
-    df["J2000_Name"] = df["Source_Name"].str.strip()
+    df["J2000_Name"] = df["Source_Name"]
     df["Source_Name"] = np.where(
-        df["ASSOC1"] == void_str,
+        df["ASSOC1"] == "",
         df["Source_Name"],
-        df["ASSOC1"].str.strip(),
+        df["ASSOC1"],
     )
     return df
 
