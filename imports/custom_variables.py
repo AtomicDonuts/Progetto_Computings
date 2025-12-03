@@ -8,38 +8,47 @@ import custom_variables as custom_paths
 
 from pathlib import Path
 
+git_dir = None
+for i in Path(__file__).parents:
+    for j in i.iterdir():
+        if ".git" in j.as_posix() and j.is_dir():
+            git_dir = i
+if git_dir is None:
+    raise FileNotFoundError(
+        "Git Directory Not Found. Please ensure that you cloned the repository in the right way."
+    )
+
 # Folders
-if Path("../imports").exists():
-    dir_imports_path = Path("../imports")
+if Path(git_dir / "imports").exists():
+    dir_imports_path = Path(git_dir / "imports")
 else:
-    raise FileNotFoundError("'../imports' not found.")
+    raise FileNotFoundError(f"{Path(git_dir / 'imports')} not found.")
 
-if Path("../map").exists():
-    dir_map_path = Path("../map")
+if Path(git_dir / "map").exists():
+    dir_map_path = Path(git_dir / "map")
 else:
-    raise FileNotFoundError("'../map' not found.")
+    raise FileNotFoundError(f"{Path(git_dir / 'map')} not found.")
 
-if Path("../files").exists():
-    dir_files_path = Path("../files")
+if Path(git_dir / "files").exists():
+    dir_files_path = Path(git_dir / "files")
 else:
-    raise FileNotFoundError("'../files' not found.")
+    raise FileNotFoundError(f"{Path(git_dir / 'files')} not found.")
 
-if Path("../fits_import").exists():
-    dir_files_path = Path("../fits_import")
+if Path(git_dir / "fits_import").exists():
+    dir_fits_import_path = Path(git_dir / "fits_import")
 else:
-    raise FileNotFoundError("'../fits_import' not found.")
+    raise FileNotFoundError(f"{Path(git_dir / 'fits_import')} not found.")
 
-if Path("../ann").exists():
-    dir_files_path = Path("../ann")
+if Path(git_dir / "ann").exists():
+    dir_ann_path = Path(git_dir / "ann")
 else:
-    raise FileNotFoundError("'../ann' not found.")
+    raise FileNotFoundError(f"{Path(git_dir / 'ann')} not found.")
 
 # Files
-fits_path = Path("../files/gll_psc_v35.fit")
-csv_path = Path("../files/gll_psc.csv")
-gmap_path = Path("../files/galattic_coordinates.csv")
-map_path = Path("../map/index.html")
-# docs_path = Path("../docs/index.html")
+fits_path = dir_files_path / "gll_psc_v35.fit"
+csv_path = dir_files_path / "gll_psc.csv"
+gmap_path = dir_files_path / "galattic_coordinates.csv"
+map_path = dir_map_path / "index.html"
 
 # Dictionaries
 name_to_code = {
