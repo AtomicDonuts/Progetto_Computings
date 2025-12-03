@@ -1,9 +1,24 @@
 """
 Definizione di alcune variabili globali.
-Deve essere importato nei vari script utilizzando la seguente sintassi:
+Usare il seguente codice per importare correttamente il modulo:
+
+
+# pylint: disable=import-error, wrong-import-position
+from pathlib import Path
 import sys
-sys.path.append("../imports/")
+git_dir = None
+for i in Path(__file__).parents:
+    for j in i.iterdir():
+        if ".git" in j.as_posix() and j.is_dir():
+            git_dir = i
+if git_dir is None:
+    raise FileNotFoundError(
+        "Git Directory Not Found. Please ensure that you cloned the repository in the right way."
+        )
+import_dir = git_dir / "imports/"
+sys.path.append(import_dir.as_posix())
 import custom_variables as custom_paths
+# pylint: enable=import-error, wrong-import-position
 """
 
 from pathlib import Path
@@ -19,6 +34,7 @@ if git_dir is None:
     )
 
 # Folders
+
 if Path(git_dir / "imports").exists():
     dir_imports_path = Path(git_dir / "imports")
 else:
@@ -43,6 +59,21 @@ if Path(git_dir / "ann").exists():
     dir_ann_path = Path(git_dir / "ann")
 else:
     raise FileNotFoundError(f"{Path(git_dir / 'ann')} not found.")
+
+#   Folder Import Dinamica
+#   VSCode lo odia partiolarmente tanto
+
+# required_dirs = [
+#     dir.name for dir in git_dir.iterdir() if (dir.is_dir()) and ("." not in dir.name)
+# ]
+
+# for folder in required_dirs:
+#     target_path = git_dir / folder
+#     if target_path.exists():
+#         globals()[f"dir_{folder}_path"] = target_path
+#     else:
+#         raise FileNotFoundError(f"{target_path} not found.")
+
 
 # Files
 fits_path = dir_files_path / "gll_psc_v35.fit"

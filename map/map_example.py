@@ -2,14 +2,28 @@
 wip 
 '''
 import argparse
-import sys
 
 from loguru import logger
 import plotly.express as px
 import pandas as pd
 
-sys.path.append("../imports/")
+# pylint: disable=import-error, wrong-import-position
+from pathlib import Path
+import sys
+
+git_dir = None
+for i in Path(__file__).parents:
+    for j in i.iterdir():
+        if ".git" in j.as_posix() and j.is_dir():
+            git_dir = i
+if git_dir is None:
+    raise FileNotFoundError(
+        "Git Directory Not Found. Please ensure that you cloned the repository in the right way."
+    )
+import_dir = git_dir / "imports/"
+sys.path.append(import_dir.as_posix())
 import custom_variables as custom_paths
+# pylint: enable=import-error, wrong-import-position
 
 def fig_generator(
         catalog_path=custom_paths.csv_path,

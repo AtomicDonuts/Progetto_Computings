@@ -8,7 +8,6 @@ Le colonne scelte saranno poi aggiustate in futuro.
 """
 
 import argparse
-import sys
 
 from astropy.io import fits
 from astropy.table import Table
@@ -16,9 +15,23 @@ from loguru import logger
 import numpy as np
 
 # Import del modulo che contiene le variabili e i path della repository
-sys.path.append("../imports/")
-import custom_variables as custom_paths
 
+# pylint: disable=import-error, wrong-import-position
+from pathlib import Path
+import sys
+git_dir = None
+for i in Path(__file__).parents:
+    for j in i.iterdir():
+        if ".git" in j.as_posix() and j.is_dir():
+            git_dir = i
+if git_dir is None:
+    raise FileNotFoundError(
+        "Git Directory Not Found. Please ensure that you cloned the repository in the right way."
+        )
+import_dir = git_dir / "imports/"
+sys.path.append(import_dir.as_posix())
+import custom_variables as custom_paths
+# pylint: enable=import-error, wrong-import-position
 
 def fits_to_pandas(fits_file_path=custom_paths.fits_path):
     """
@@ -83,5 +96,5 @@ if __name__ == "__main__":
         help="Path di output del database csv.",
     )
     args = parser.parse_args()
-    df_data = fits_to_pandas(args.input_path).to_csv(args.output_path, index=False)
-    logger.info(f"{custom_paths.Path(args.output_path).resolve()} saved.")
+    DF_DATA = fits_to_pandas(args.input_path).to_csv(args.output_path, index=False)
+    logger.info(f"{Path(args.output_path).resolve()} saved.")
