@@ -32,4 +32,47 @@ fits_path = Path("../files/gll_psc_v35.fit")
 csv_path = Path("../files/gll_psc.csv")
 gmap_path = Path("../files/galattic_coordinates.csv")
 map_path = Path("../map/index.html")
-#docs_path = Path("../docs/index.html")
+# docs_path = Path("../docs/index.html")
+
+
+# Dictionaries
+name_to_code = {
+    "Pulsar": ["PSR"],
+    "AGN": ["BLL", "FSRQ", "RDG", "AGN", "SSRQ", "CSS", "BCU", "NLSY1", "SEY"],
+    "Globular cluster": "glc",
+    "Starburst galaxy": "sbg",
+    "PWN": "pwn",
+    "SNR": "snr",
+    "SNR or PWN": "spp",
+    "Binary": ["bin", "hmb", "lmb"],
+    "Galaxy": "gal",
+    "Nova": "nov",
+    "Star-Forming Regions": "sfr",
+    "Uknown": "unk",
+    "No Association": "",
+}
+code_to_name = {
+    "Pse": "Pulsar",
+    "Bll": "AGN",
+    "Fsrq": "AGN",
+    "Rdg": "AGN",
+    "Ang": "AGN",
+    "Ssrq": "AGN",
+    "Css": "AGN",
+    "Bcu": "AGN",
+    "Nlsy1": "AGN",
+    "Sey": "AGN",
+    "Glc": "Globular cluster",
+    "Sbg": "Starburst galaxy",
+    "Pwn": "PWN",
+    "Snr": "SNR",
+    "Spp": "SNR or PWN",
+    "Bin": "Binary",
+    "Hmb": "Binary",
+    "Lmb": "Binary",
+    "Gal": "Galaxy",
+    "Nov": "Nova",
+    "Sfr": "Star-Forming Regions",
+    "Unk": "Uknown",
+    "": "No Association",
+}

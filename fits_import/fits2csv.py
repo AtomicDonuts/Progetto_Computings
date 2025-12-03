@@ -51,6 +51,7 @@ def fits_to_pandas(fits_file_path=custom_paths.fits_path):
 
     df = data.to_pandas()
     df["CLASS_GENERIC"] = df["CLASS1"].str.capitalize()
+    df["SOURCE_TYPE"] = df["CLASS_GENERIC"].replace(custom_paths.code_to_name)
     df["CLASS_DESCRIPTION"] = np.where(
         df["CLASS1"].str.isupper(), "Identified", "Associated"
     )
