@@ -50,16 +50,16 @@ def fits_to_pandas(fits_file_path=custom_paths.fits_path):
     )
 
     df = data.to_pandas()
-    df["CLASS_GENERIC"] = df["CLASS1"].str.capitalize()
-    df["SOURCE_TYPE"] = df["CLASS_GENERIC"].replace(custom_paths.code_to_name)
+    df["CLASS_TYPE"] = df["CLASS1"].str.strip().str.upper()
     df["CLASS_DESCRIPTION"] = np.where(
         df["CLASS1"].str.isupper(), "Identified", "Associated"
     )
-    df["J2000_Name"] = df["Source_Name"]
+    df["CLASS_GENERIC"] = df["CLASS_TYPE"].replace(custom_paths.code_to_name)
+    df["J2000_Name"] = df["Source_Name"].str.strip()
     df["Source_Name"] = np.where(
         df["ASSOC1"] == void_str,
         df["Source_Name"],
-        df["ASSOC1"],
+        df["ASSOC1"].str.strip(),
     )
     return df
 
