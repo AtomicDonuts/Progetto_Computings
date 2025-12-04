@@ -49,6 +49,20 @@ def fits_to_pandas(fits_file_path=custom_paths.fits_path):
     logger.info(f"Parsing FITS: {fits_file_path}...")
     data = fits.getdata(fits_file_path, ext=1)
     data = Table(data)
+
+    # Queste colonne contengono array di dati che possono servire
+    # divido ogni array in un numero di colonne e poi le elimino
+    col_array = [
+        "Flux_Band",
+        "nuFnu_Band",
+        "Sqrt_TS_Band",
+        "Flux_History",
+        "Sqrt_TS_History",
+    ]
+    for j in col_array:
+        for i in range(len(data[f"{j}"][0])):
+            data[f"{j}_{i}"] = data[f"{j}"][:, i]
+    
     data.remove_columns(
         [
             "Flux_Band",
@@ -96,5 +110,5 @@ if __name__ == "__main__":
         help="Path di output del database csv.",
     )
     args = parser.parse_args()
-    DF_DATA = fits_to_pandas(args.input_path).to_csv(args.output_path, index=False)
+    fits_to_pandas(args.input_path).to_csv(args.output_path, index=False)
     logger.info(f"{Path(args.output_path).resolve()} saved.")
