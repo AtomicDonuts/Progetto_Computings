@@ -34,8 +34,10 @@ jobs:
       - name: Prepare deployment
         run: |
           mkdir public
+          mkdir public/map
           # Sposto il file generato da 'map/' alla cartella di pubblicazione
-          mv map/index.html public/index.html
+          cp README.md public/README.md
+          mv map/index.html public/map/index.html
 
       # Carichiamo il contenuto di 'public' sul branch 'gh-pages'
       - name: Deploy to GitHub Pages
