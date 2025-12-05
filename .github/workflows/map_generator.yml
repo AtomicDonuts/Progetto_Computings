@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - issue#5
     paths:
       - 'fits_import/fits2csv.py'
       - 'map/map_example.py'
