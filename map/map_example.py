@@ -1,6 +1,16 @@
-'''
-wip 
-'''
+"""
+Script per la generazione di una mappa interattiva del cielo (Sky Map)
+delle sorgenti astronomiche.
+
+Questo script carica i dati da un catalogo in formato CSV (o da un DataFrame
+fornito in input) e genera un grafico di dispersione geografico (scatter_geo)
+interattivo utilizzando le coordinate Galattiche (GLAT e GLON).
+Il risultato finale è una mappa Plotly salvata in un file HTML specificato.
+
+Utilizzo da riga di comando:
+python map_example.py [-i <path_input_csv>] [-o <path_output_html>]
+"""
+
 import argparse
 
 from loguru import logger
@@ -31,19 +41,29 @@ def fig_generator(
         html_output=custom_paths.map_path
 ):
     """
-    fig_generator 
-    Genera una mappa interattiva delle sorgenti.
-    WIP
+    Genera una mappa interattiva (scatter_geo) delle sorgenti utilizzando i dati
+    di latitudine (GLAT) e longitudine (GLON) Galattiche.
+
+    Il grafico viene salvato nel path specificato da `html_output` in formato HTML.
 
     Args:
-        catalog_path (str,pathlib.Path, optional): _description_. Defaults to custom_paths.csv_path.
+        catalog_path (str | pathlib.Path, optional):
+            Path del catalogo in formato CSV da caricare. Viene ignorato se
+            viene fornito 'input_dataframe'.
+            Defaults to custom_paths.csv_path.
 
-        input_dataframe (pandas.DataFrame, optional): _description_. Defaults to None.
+        input_dataframe (pandas.DataFrame, optional):
+            DataFrame di pandas da utilizzare come input per la mappa. Se fornito,
+            il caricamento dal file CSV viene saltato.
+            Defaults to None.
 
-        html_output (str,pathlib.Path, optional): _description_. Defaults to custom_paths.htmlmap_path.
+        html_output (str | pathlib.Path, optional):
+            Path completo dove salvare la mappa interattiva in formato HTML.
+            Defaults to custom_paths.map_path.
 
     Returns:
-        ploty.express.fig: Canvas della mappa interattiva.
+        plotly.express.Figure:
+            Oggetto Figure di Plotly contenente la tela della mappa interattiva generata.
     """
     if input_dataframe is None:
         logger.info(f"Loading from {catalog_path}")
@@ -69,7 +89,7 @@ def fig_generator(
                 "GLON":False,
                 },
             projection="mollweide",
-            title="Sky Map Automatica!",
+            title="Sky Map",
             basemap_visible=False,
         )
     except ValueError:
