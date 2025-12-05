@@ -31,19 +31,17 @@ jobs:
       - name: Execute map
         run: python map/map_generator_action.py
 
-      # Creiamo una cartella pulita dove mettere SOLO ciò che va online
       - name: Prepare deployment
         run: |
           mkdir public
           mkdir public/map
-          # Sposto il file generato da 'map/' alla cartella di pubblicazione
           cp README.md public/README.md
           mv map/index.html public/map/index.html
 
-      # Carichiamo il contenuto di 'public' sul branch 'gh-pages'
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-          force_orphan: true # Mantiene il branch gh-pages pulito e leggero (1 solo commit)
+          force_orphan: true
+          jekyll: true
