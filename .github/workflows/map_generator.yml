@@ -1,0 +1,46 @@
+# This workflow will upload a Python Package to PyPI when a release is created
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Map Generator
+
+on:
+  push:
+    branches:
+      - main  
+    paths:
+      - /fits_import/fits2csv.py
+      - /map/map_example.py
+
+permissions:
+  contents: write  # Fondamentale: dà il permesso al bot di scrivere nel repo
+
+jobs:
+  release-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install Dependency
+        run: |
+              python -m pip install --upgrade pip
+              pip install -r requirements.txt
+
+      - name: Execute map
+        run: python /map_generator_action.py
+
+      - name: Commit e Push dei cambiamenti
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Auto-update: New HTML map [via ci]"
+          file_pattern: "map/index.html"
+      
