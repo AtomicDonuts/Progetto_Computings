@@ -28,10 +28,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Execute map
+      - name: Execute Map Generator
         run: python map/map_generator_action.py
 
-      - name: Prepare deployment
+      - name: Prepare for deploy
         run: |
           mkdir public
           mkdir public/map
@@ -44,4 +44,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
           force_orphan: true
-          jekyll: true
+          enable_jekyll: true
