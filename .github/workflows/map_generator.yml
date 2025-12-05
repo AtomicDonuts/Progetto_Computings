@@ -1,28 +1,20 @@
-# This workflow will upload a Python Package to PyPI when a release is created
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
-
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
 name: Map Generator
 
 on:
   push:
     branches:
-      - main  
+      - main
     paths:
-      - /fits_import/fits2csv.py
-      - /map/map_example.py
+      - 'fits_import/fits2csv.py'
+      - 'map/map_example.py'
+      - 'map/map_generator_action.py' 
 
 permissions:
-  contents: write  # Fondamentale: dà il permesso al bot di scrivere nel repo
+  contents: write
 
 jobs:
-  release-build:
+  deploy-map:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -32,15 +24,23 @@ jobs:
 
       - name: Install Dependency
         run: |
-              python -m pip install --upgrade pip
-              pip install -r requirements.txt
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
       - name: Execute map
-        run: python /map_generator_action.py
+        run: python map/map_generator_action.py
 
-      - name: Commit e Push dei cambiamenti
-        uses: stefanzweifel/git-auto-commit-action@v5
+      # Creiamo una cartella pulita dove mettere SOLO ciò che va online
+      - name: Prepare deployment
+        run: |
+          mkdir public
+          # Sposto il file generato da 'map/' alla cartella di pubblicazione
+          mv map/index.html public/index.html
+
+      # Carichiamo il contenuto di 'public' sul branch 'gh-pages'
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          commit_message: "Auto-update: New HTML map [via ci]"
-          file_pattern: "map/index.html"
-      
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          force_orphan: true # Mantiene il branch gh-pages pulito e leggero (1 solo commit)
