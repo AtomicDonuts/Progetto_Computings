@@ -69,7 +69,7 @@ def fig_generator(
                 "GLON":False,
                 },
             projection="mollweide",
-            title="Sky Map Automatica!",
+            title="Sky Map",
             basemap_visible=False,
         )
     except ValueError:
