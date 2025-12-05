@@ -46,11 +46,6 @@ def fig_generator(
 
     Il grafico viene salvato nel path specificato da `html_output` in formato HTML.
 
-    Tenta inizialmente di colorare i punti in base alla colonna 'CLASS_GENERIC' e
-    fornire dati dettagliati al passaggio del mouse. Se 'CLASS_GENERIC' non è
-    presente nel DataFrame, ripiega sulla colonna 'CLASS1' con informazioni di
-    hover ridotte.
-
     Args:
         catalog_path (str | pathlib.Path, optional):
             Path del catalogo in formato CSV da caricare. Viene ignorato se
