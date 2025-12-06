@@ -218,3 +218,6 @@ __marimo__/
 #*.html
 .vscode/settings.json
 prova.py
+!/ann/*.ipynb
+/ann/*.png
+ann/colm_analisis.ipynb
