@@ -52,17 +52,17 @@ def fits_to_pandas(fits_file_path=custom_paths.fits_path):
 
     # Queste colonne contengono array di dati che possono servire
     # divido ogni array in un numero di colonne e poi le elimino
-    col_array = [
+    col_name = [
         "Flux_Band",
         "nuFnu_Band",
         "Sqrt_TS_Band",
         "Flux_History",
         "Sqrt_TS_History",
     ]
-    for j in col_array:
-        for i in range(len(data[f"{j}"][0])):
-            data[f"{j}_{i}"] = data[f"{j}"][:, i]
-    
+    for col_array in col_name:
+        for array_index in range(len(data[f"{col_array}"][0])):
+            data[f"{col_array}_{array_index}"] = data[f"{col_array}"][:, array_index]
+
     data.remove_columns(
         [
             "Flux_Band",
