@@ -221,3 +221,4 @@ prova.py
 !/ann/*.ipynb
 /ann/*.png
 ann/colm_analisis.ipynb
+*.keras
