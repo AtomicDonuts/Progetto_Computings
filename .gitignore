@@ -222,3 +222,4 @@ prova.py
 /ann/*.png
 ann/colm_analisis.ipynb
 *.keras
+ann/my_dir

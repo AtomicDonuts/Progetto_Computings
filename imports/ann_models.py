@@ -3,6 +3,7 @@ doc
 """
 
 import numpy as np
+import keras
 from keras.layers import Concatenate, Dense, Dropout, Flatten, Input
 from keras.models import Model, Sequential
 
@@ -38,3 +39,36 @@ def simple_model(input_data_shape):
     model.add(Dropout(0.2))
     model.add(Dense(4, activation="relu"))
     model.add(Dense(1, activation="sigmoid"))
+    return model
+
+def hp_model(hp):
+    '''
+    doc
+    '''
+    model = Sequential()
+
+    nodes = hp.Int("nodes",min_value=4,max_value=16,step=4)
+    drops = hp.Float("dropout",min_value=0.2,max_value=0.5,step = 0.1)
+
+    model.add(Dense(units= nodes, activation="relu"))
+    model.add(Dropout(rate = drops))
+
+    model.add(Dense(units= nodes * 2, activation="relu"))
+    model.add(Dropout(rate = drops))
+
+    model.add(Dense(units= nodes, activation="relu"))
+    model.add(Dropout(rate = drops))
+
+    model.add(Dense(4, activation="relu"))
+    model.add(Dense(1, activation="sigmoid"))
+
+    model.compile(
+        loss="binary_crossentropy",
+        optimizer="adam",
+        metrics=[
+            "accuracy",
+#            "f1_score",
+            "auc",
+        ],
+    )
+    return model
