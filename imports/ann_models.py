@@ -2,7 +2,6 @@
 doc
 """
 
-import numpy as np
 import keras
 from keras.layers import Concatenate, Dense, Dropout, Flatten, Input
 from keras.models import Model, Sequential
@@ -41,23 +40,24 @@ def simple_model(input_data_shape):
     model.add(Dense(1, activation="sigmoid"))
     return model
 
+
 def hp_model(hp):
-    '''
+    """
     doc
-    '''
+    """
     model = Sequential()
 
-    nodes = hp.Int("nodes",min_value=4,max_value=16,step=4)
-    drops = hp.Float("dropout",min_value=0.2,max_value=0.6,step = 0.1)
+    nodes = hp.Int("nodes", min_value=4, max_value=16, step=4)
+    drops = hp.Float("dropout", min_value=0.2, max_value=0.6, step=0.1)
 
-    model.add(Dense(units= nodes, activation="relu"))
-    model.add(Dropout(rate = drops))
+    model.add(Dense(units=nodes, activation="relu"))
+    model.add(Dropout(rate=drops))
 
-    model.add(Dense(units= nodes * 2, activation="relu"))
-    model.add(Dropout(rate = drops))
+    model.add(Dense(units=nodes * 2, activation="relu"))
+    model.add(Dropout(rate=drops))
 
-    model.add(Dense(units= nodes, activation="relu"))
-    model.add(Dropout(rate = drops))
+    model.add(Dense(units=nodes, activation="relu"))
+    model.add(Dropout(rate=drops))
 
     model.add(Dense(4, activation="relu"))
     model.add(Dense(1, activation="sigmoid"))
@@ -67,8 +67,42 @@ def hp_model(hp):
         optimizer="adam",
         metrics=[
             "accuracy",
-#            "f1_score",
+            #            "f1_score",
             "auc",
         ],
     )
+    return model
+
+
+def hp_model_lr(hp):
+    """
+    doc
+    """
+    model = Sequential()
+
+    nodes = hp.Choice("nodes", [4, 8, 16, 32])
+    drops = hp.Float("dropout", min_value=0.2, max_value=0.6, step=0.1)
+    learning_rate = hp.Float("lr", min_value=1e-4, max_value=1e-2, sampling="log")
+
+    model.add(Dense(units=nodes, activation="relu"))
+    model.add(Dropout(rate=drops))
+
+    model.add(Dense(units=nodes * 2, activation="relu"))
+    model.add(Dropout(rate=drops))
+
+    model.add(Dense(units=nodes, activation="relu"))
+    model.add(Dropout(rate=drops))
+
+    model.add(Dense(units=int(nodes / 2), activation="relu"))
+    model.add(Dense(1, activation="sigmoid"))
+    model.compile(
+        optimizer="adam",
+        loss="binary_crossentropy",
+        metrics=[
+            "accuracy",
+            #"f1_score",
+            "auc",
+        ],
+    )
+    model.optimizer.learning_rate = learning_rate
     return model
