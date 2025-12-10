@@ -47,7 +47,7 @@ def hp_model(hp):
     """
     model = Sequential()
 
-    nodes = hp.Int("nodes", min_value=4, max_value=16, step=4)
+    nodes = hp.Choice("nodes", [4, 8, 16, 32])
     drops = hp.Float("dropout", min_value=0.2, max_value=0.6, step=0.1)
 
     model.add(Dense(units=nodes, activation="relu"))
@@ -71,6 +71,7 @@ def hp_model(hp):
             "auc",
         ],
     )
+    model.optimizer.learning_rate = 0.01
     return model
 
 
