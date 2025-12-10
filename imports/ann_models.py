@@ -82,7 +82,8 @@ def hp_model_lr(hp):
 
     nodes = hp.Choice("nodes", [4, 8, 16, 32])
     drops = hp.Float("dropout", min_value=0.2, max_value=0.6, step=0.1)
-    learning_rate = hp.Float("lr", min_value=1e-4, max_value=1e-2, sampling="log")
+    # learning_rate = hp.Float("lr", min_value=1e-4, max_value=1e-2, sampling="log")
+    learning_rate = hp.Choice("lr", [1e-1,1e-2,1e-3])
 
     model.add(Dense(units=nodes, activation="relu"))
     model.add(Dropout(rate=drops))
