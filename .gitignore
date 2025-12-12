@@ -224,3 +224,5 @@ ann/colm_analisis.ipynb
 *.keras
 ann/Prima_Prova
 ann/DNN
+ann/DNN-NoKFold
+ann/Finale
