@@ -81,7 +81,7 @@ tuner = kt.Hyperband(
     factor=3,
     overwrite=False,
     directory="Finale",
-    project_name=f"TriploInput-No_VarIndx",
+    project_name="TriploInput",
 )
 stop_early = keras.callbacks.EarlyStopping(monitor="val_loss", patience=5)
 tuner.search(

@@ -182,7 +182,7 @@ def hp_final_model(hp):
     final_hidden = Dense(units=nodes * 2, activation="relu")(concat)
     final_hidden = Dropout(rate=drops)(final_hidden)
     final_hidden = Dense(units=nodes, activation="relu")(final_hidden)
-    #final_hidden = Dense(units=4, activation="relu")(final_hidden)
+    final_hidden = Dense(units=4, activation="relu")(final_hidden)
     outputs = Dense(1, activation="sigmoid")(final_hidden)
 
     model = Model(
