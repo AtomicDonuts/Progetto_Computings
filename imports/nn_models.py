@@ -69,7 +69,6 @@ def hp_model(hp):
         optimizer="adam",
         metrics=[
             "accuracy",
-            #            "f1_score",
             "auc",
         ],
     )
@@ -86,7 +85,6 @@ def hp_model_lr(hp):
     nodes = hp.Choice("nodes", [4, 8, 16, 32])
     drops = hp.Float("dropout", min_value=0.2, max_value=0.6, step=0.1)
     learning_rate = hp.Float("lr", min_value=1e-4, max_value=1e-2, sampling="log")
-    # learning_rate = hp.Choice("lr", [1e-1,1e-2,1e-3])
 
     model.add(Dense(units=nodes, activation="relu"))
     model.add(Dropout(rate=drops))
@@ -104,7 +102,6 @@ def hp_model_lr(hp):
         loss="binary_crossentropy",
         metrics=[
             "accuracy",
-            # "f1_score",
             "auc",
         ],
     )
@@ -147,7 +144,7 @@ def final_model(flux_band_shape, flux_hist_shape, input_data_shape):
     model.compile(
         loss="binary_crossentropy",
         optimizer="adam",
-        metrics=["accuracy", 
+        metrics=["accuracy",
                  #"f1_score",
                  "auc"],
     )
@@ -173,7 +170,7 @@ def hp_final_model(hp):
     hidden2 = Dropout(rate=drops)(hidden2)
     hidden2 = Dense(units=nodes, activation="relu")(hidden2)
 
-    inputs3 = Input(shape=(4,))
+    inputs3 = Input(shape=(5,))
     hidden3 = Dense(units=nodes * 2, activation="relu")(inputs3)
     hidden3 = Dropout(rate=drops)(hidden3)
     hidden3 = Dense(units=nodes, activation="relu")(hidden3)
@@ -194,7 +191,6 @@ def hp_final_model(hp):
         optimizer="adam",
         metrics=[
             "accuracy",
-            # "f1_score",
             "auc",
         ],
     )

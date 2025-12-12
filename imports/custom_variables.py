@@ -41,6 +41,11 @@ if Path(git_dir / "ann").exists():
 else:
     raise FileNotFoundError(f"{Path(git_dir / 'ann')} not found.")
 
+if Path(dir_ann_path / "keras_models").exists():
+    dir_models_path = Path(dir_ann_path / "keras_models")
+else:
+    raise FileNotFoundError(f"{Path(dir_ann_path / 'keras_models')} not found.")
+
 #   Folder Import Dinamica
 #   VSCode lo odia partiolarmente tanto
 
