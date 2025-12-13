@@ -215,14 +215,9 @@ __marimo__/
 *.csv 
 *.root
 *.reg
-#*.html
-.vscode/settings.json
-prova.py
+.vscode/
 !/ann/*.ipynb
-/ann/*.png
 ann/colm_analisis.ipynb
 *.keras
-ann/Prima_Prova
-ann/DNN
-ann/DNN-NoKFold
-ann/Finale
+ann/Progetto
+*log*
