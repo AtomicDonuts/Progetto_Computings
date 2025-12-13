@@ -1,5 +1,7 @@
 """
-Definizione di alcune variabili globali.
+This module defines global variables and file paths used throughout the project.
+It dynamically locates the git root directory to ensure paths work regardless of
+execution context.
 """
 
 from pathlib import Path
@@ -72,21 +74,6 @@ prediction_path = dir_models_path / "prediction.npy"
 png_path = dir_models_path / "model.png"
 
 # Dictionaries
-name_to_code = {
-    "Pulsar": ["PSR","MSP"],
-    "AGN": ["BLL", "FSRQ", "RDG", "AGN", "SSRQ", "CSS", "BCU", "NLSY1", "SEY"],
-    "Globular cluster": "glc",
-    "Starburst galaxy": "sbg",
-    "PWN": "pwn",
-    "SNR": "snr",
-    "SNR or PWN": "spp",
-    "Binary": ["bin", "hmb", "lmb"],
-    "Galaxy": "gal",
-    "Nova": "nov",
-    "Star-Forming Regions": "sfr",
-    "Uknown": "unk",
-    "No Association": "",
-}
 code_to_name = {
     "PSR": "Pulsar",
     "MSP": "Pulsar",
