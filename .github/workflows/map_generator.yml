@@ -47,7 +47,7 @@ jobs:
       - name: Moving files
         run: |
 
-          mv docs/build/html public/docs
+          mv docs/build/dirhtml/* public/docs/
           cp README.md public/README.md
           mv map/index.html public/map/index.html
 
@@ -57,4 +57,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
           force_orphan: true
-          enable_jekyll: true
