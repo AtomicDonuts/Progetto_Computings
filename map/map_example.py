@@ -85,6 +85,7 @@ def fig_generator(
                 "J2000_Name":True,
                 "CLASS_TYPE":True,
                 "CLASS_DESCRIPTION": True,
+                "CLASS_DNN": True,
                 "GLAT":False,
                 "GLON":False,
                 },
@@ -93,6 +94,7 @@ def fig_generator(
             basemap_visible=False,
         )
     except ValueError:
+        logger.error("Something Went Wrong")
         fig = px.scatter_geo(
             dataframe,
             lat="GLAT",

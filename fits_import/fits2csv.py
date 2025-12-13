@@ -12,6 +12,7 @@ import argparse
 from astropy.io import fits
 from astropy.table import Table
 from loguru import logger
+import pandas as pd
 import numpy as np
 
 # Import del modulo che contiene le variabili e i path della repository
@@ -33,7 +34,39 @@ sys.path.append(import_dir.as_posix())
 import custom_variables as custom_paths
 # pylint: enable=import-error, wrong-import-position
 
-def fits_to_pandas(fits_file_path=custom_paths.fits_path):
+
+def add_prediction(
+    catalog_path=custom_paths.csv_path,
+    input_dataframe=None,
+    prediction_path=custom_paths.prediction_path,
+):
+    """
+    doc
+    """
+    if input_dataframe is None:
+        logger.info(f"Loading from {catalog_path}")
+        dataframe = pd.read_csv(catalog_path)
+    else:
+        if catalog_path != custom_paths.csv_path:
+            logger.warning(
+                "'input_dataframe' detected, 'catalog_path' will be ignored."
+            )
+        logger.info("Loading DataFrame from input")
+        dataframe = input_dataframe
+
+    prediction = np.load(prediction_path)
+    dataframe["CLASS_DNN"] = np.where(
+        (dataframe["CLASS_GENERIC"] == "No Association")
+        | (dataframe["CLASS_GENERIC"] == "AGN")
+        | (dataframe["CLASS_GENERIC"] == "Pulsar"),
+        prediction,
+        "Not Predicted",
+    )
+    return dataframe
+
+
+def fits_to_pandas(fits_file_path=custom_paths.fits_path,
+                   prediction_path=custom_paths.prediction_path,):
     """
     fits_to_pandas
     Funzione che converte il catalogo in fits in un database Pandas
@@ -90,6 +123,10 @@ def fits_to_pandas(fits_file_path=custom_paths.fits_path):
         df["Source_Name"],
         df["ASSOC1"],
     )
+    df = df.drop(1389)
+    if Path(prediction_path).exists():
+        logger.info("DNN Predictions found.")
+        df = add_prediction(input_dataframe=df,prediction_path = Path(prediction_path))
     return df
 
 
@@ -109,6 +146,13 @@ if __name__ == "__main__":
         default=f"{custom_paths.csv_path}",
         help="Path di output del database csv.",
     )
+    parser.add_argument(
+        "--prediction_path",
+        "-p",
+        default=f"{custom_paths.csv_path}",
+        help="Path delle prediction della rete neurale.",
+    )
     args = parser.parse_args()
-    fits_to_pandas(args.input_path).to_csv(args.output_path, index=False)
+    dataf = fits_to_pandas(args.input_path,args.prediction_path)
+    dataf.to_csv(args.output_path, index=False)
     logger.info(f"{Path(args.output_path).resolve()} saved.")

@@ -161,15 +161,14 @@ for ktrain, ktest in skf.split(np.zeros(len(lab)), lab):
         y=k_lab,
         epochs=300,
         validation_data=[[k_vfb, k_vhb, k_via], k_vlab],
-        callbacks=[early_stopping, reduce_lr],
-        verbose = 0
+        callbacks=[early_stopping, reduce_lr]
     )
 
     print(f"Fold No.{fold_no}")
     print("------------------------------------------------------------------------")
     print("Prediction on Fold")
-    scores = reset_model.evaluate([k_vfb, k_vhb, k_via], k_vlab, verbose=0)
-    predictions = reset_model.predict([k_vfb, k_vhb, k_via], verbose = 0)
+    scores = reset_model.evaluate([k_vfb, k_vhb, k_via], k_vlab)
+    predictions = reset_model.predict([k_vfb, k_vhb, k_via])
 
     loss_k_array.append(scores[0])
     auc_k_array.append(scores[1])
@@ -205,8 +204,8 @@ for ktrain, ktest in skf.split(np.zeros(len(lab)), lab):
     print("------------------------------------------------------------------------")
 
     print("Prediction on Evaluation Dataset")
-    scores = reset_model.evaluate([vfb, vhb, via], vlab, verbose=0)
-    predictions = reset_model.predict([vfb, vhb, via], verbose=0)
+    scores = reset_model.evaluate([vfb, vhb, via], vlab)
+    predictions = reset_model.predict([vfb, vhb, via])
 
     loss_all_array.append(scores[0])
     auc_all_array.append(scores[1])

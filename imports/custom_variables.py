@@ -66,6 +66,9 @@ fits_path = dir_files_path / "gll_psc_v35.fit"
 csv_path = dir_files_path / "gll_psc.csv"
 gmap_path = dir_files_path / "galattic_coordinates.csv"
 map_path = dir_map_path / "index.html"
+
+model_path = dir_models_path / "prediction_model.keras"
+prediction_path = dir_models_path / "prediction.npy"
 png_path = dir_models_path / "model.png"
 
 # Dictionaries
