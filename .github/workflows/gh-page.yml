@@ -21,7 +21,7 @@ jobs:
       - name: Install Dependency
         run: |
           python -m pip install --upgrade pip
-          pip install astropy numpy loguru pandas plotly sphinx shibuya
+          pip install astropy numpy loguru pandas plotly sphinx shibuya grip
       
       - name: Creating Directories
         run: |
@@ -44,11 +44,14 @@ jobs:
       - name: Execute Map Generator
         run: python map/map_generator_action.py
 
+      - name: Trasnsforming README
+        run: grip README.md --export index.html
+
       - name: Moving files
         run: |
 
           mv docs/build/dirhtml/* public/docs/
-          cp README.md public/README.md
+          cp index.html public/index.html
           mv map/index.html public/map/index.html
 
       - name: Deploy to GitHub Pages
