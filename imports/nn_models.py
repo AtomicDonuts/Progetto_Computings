@@ -1,5 +1,6 @@
 """
-doc
+This module defines the Keras architectures for the Neural Networks used in the project.
+It includes simple models, multi-input models, and functions for hyperparameter tuning.
 """
 
 from keras.layers import Concatenate, Dense, Dropout, Flatten, Input
@@ -8,7 +9,15 @@ from keras.models import Model, Sequential
 
 def paper_model(flux_band_shape, flux_hist_shape):
     """
-    doc string
+    Builds a multi-input neural network model based on the reference paper architecture.
+    It takes flux bands and flux history as separate inputs.
+
+    :param flux_band_shape: Shape of the flux band input features.
+    :type flux_band_shape: tuple
+    :param flux_hist_shape: Shape of the flux history input features.
+    :type flux_hist_shape: tuple
+    :return: A compiled Keras Model.
+    :rtype: keras.models.Model
     """
     inputs = Input(shape=flux_band_shape)
     hidden = Flatten()(inputs)
@@ -27,7 +36,12 @@ def paper_model(flux_band_shape, flux_hist_shape):
 
 def simple_model(input_data_shape):
     """
-    doc
+    Builds a simple sequential Feed-Forward Neural Network.
+
+    :param input_data_shape: Shape of the input features.
+    :type input_data_shape: tuple
+    :return: A uncompiled Keras Sequential Model.
+    :rtype: keras.models.Sequential
     """
     model = Sequential()
     model.add(Input(shape=input_data_shape))
@@ -41,43 +55,14 @@ def simple_model(input_data_shape):
     model.add(Dense(1, activation="sigmoid"))
     return model
 
-
-def hp_model(hp):
-    """
-    doc
-    """
-    model = Sequential()
-
-    nodes = hp.Choice("nodes", [4, 8, 16, 32])
-    drops = hp.Float("dropout", min_value=0.2, max_value=0.6, step=0.1)
-
-    model.add(Dense(units=nodes, activation="relu"))
-    model.add(Dropout(rate=drops))
-
-    model.add(Dense(units=nodes * 2, activation="relu"))
-    model.add(Dropout(rate=drops))
-
-    model.add(Dense(units=nodes, activation="relu"))
-    model.add(Dropout(rate=drops))
-
-    model.add(Dense(4, activation="relu"))
-    model.add(Dense(1, activation="sigmoid"))
-
-    model.compile(
-        loss="binary_crossentropy",
-        optimizer="adam",
-        metrics=[
-            "accuracy",
-            "auc",
-        ],
-    )
-    model.optimizer.learning_rate = 0.01
-    return model
-
-
 def hp_model_lr(hp):
     """
-    doc
+    Builds a tunable sequential model that also tunes the learning rate.
+
+    :param hp: Hyperparameters object from Keras Tuner.
+    :type hp: keras_tuner.HyperParameters
+    :return: A compiled Keras Model with tunable learning rate.
+    :rtype: keras.models.Sequential
     """
     model = Sequential()
 
@@ -110,7 +95,17 @@ def hp_model_lr(hp):
 
 def final_model(flux_band_shape, flux_hist_shape, input_data_shape):
     """
-    final_model _summary_
+    Constructs the final three-input Neural Network architecture.
+    Inputs are: Flux Band, Flux History, and Additional Features (e.g., Coordinates, Index).
+
+    :param flux_band_shape: Shape tuple for Flux Band input.
+    :type flux_band_shape: tuple
+    :param flux_hist_shape: Shape tuple for Flux History input.
+    :type flux_hist_shape: tuple
+    :param input_data_shape: Shape tuple for Additional Features input.
+    :type input_data_shape: tuple
+    :return: A compiled Keras Model.
+    :rtype: keras.models.Model
     """
     inputs = Input(shape=flux_band_shape)
     hidden = Dense(16, activation="relu")(inputs)
@@ -153,7 +148,13 @@ def final_model(flux_band_shape, flux_hist_shape, input_data_shape):
 
 def hp_final_model(hp):
     """
-    final_model _summary_
+    Constructs a tunable version of the final three-input architecture for Keras Tuner.
+    Allows tuning of layer sizes, dropout, and learning rate.
+
+    :param hp: Hyperparameters object from Keras Tuner.
+    :type hp: keras_tuner.HyperParameters
+    :return: A compiled Keras Model ready for tuning.
+    :rtype: keras.models.Model
     """
     nodes = hp.Choice("nodes", [4, 8, 16, 32])
     drops = hp.Float("dropout", min_value=0.2, max_value=0.6, step=0.1)
