@@ -38,7 +38,7 @@ jobs:
           sphinx-apidoc -o docs/source/api/map ./map/
           rm -rf docs/build
           cd docs
-          make html
+          make dirhtml
           cd ..
 
       - name: Execute Map Generator
@@ -47,7 +47,7 @@ jobs:
       - name: Moving files
         run: |
 
-          mv docs/build/html public/docs/
+          mv docs/build/html public/docs
           cp README.md public/README.md
           mv map/index.html public/map/index.html
 
