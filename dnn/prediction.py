@@ -99,31 +99,31 @@ def model_prediction(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Crea l'array delle predizioni per la rete neurale."
+        description="This script can be executed to generate predictions with given model."
     )
     parser.add_argument(
         "--csv_path",
         "-i",
         default=f"{custom_paths.csv_path}",
-        help="Path del cataologo csv.",
+        help="Path to the input CSV catalog containing the source data to be classified.",
     )
     parser.add_argument(
         "--threshold",
         "-th",
         default=0.63,
-        help="Threshold per dividere AGN da Pulsar.",
+        help="The probability threshold used to distinguish between AGN and Pulsar classes.\nSources with a probability higher than this value are classified as Pulsars.",
     )
     parser.add_argument(
         "--model_path",
         "-m",
         default=f"{custom_paths.model_path}",
-        help="Path del modello della rete neurale già allenato.",
+        help="Path to the pre-trained Keras model file (.keras) to be used for inference.",
     )
     parser.add_argument(
         "--prediction_path",
         "-p",
         default=f"{custom_paths.prediction_path}",
-        help="Path delle prediction della rete neurale.",
+        help="Output path where the resulting predictions array (.npy) will be saved.",
     )
     args = parser.parse_args()
     preds = model_prediction(
