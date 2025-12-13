@@ -1,12 +1,13 @@
 import sys
 
 # pylint: disable=import-error, wrong-import-position
+
+from loguru import logger
 import numpy as np
 import pandas as pd
 import keras
 from keras.models import load_model, clone_model
 import keras_tuner as kt
-from scipy import stats
 from sklearn.utils import class_weight
 from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import StandardScaler
@@ -96,6 +97,9 @@ auc_k_array = []
 accuracy_k_array = []
 acc_agn_k_array = []
 acc_psr_k_array = []
+eq_th_k_array =[]
+eq_acc_agn_k_array = []
+eq_acc_psr_k_array = []
 f1_k_array = []
 th_k_array = []
 cm_k_array = []
@@ -105,10 +109,14 @@ auc_all_array = []
 accuracy_all_array = []
 acc_agn_all_array = []
 acc_psr_all_array = []
+eq_th_all_array = []
+eq_acc_agn_all_array = []
+eq_acc_psr_all_array = []
 f1_all_array = []
 th_all_array = []
 cm_all_array = []
 
+logger.debug("Inizio Stratified KFolding")
 fold_no = 0
 skf = StratifiedKFold(n_splits=10, shuffle=True)
 for ktrain, ktest in skf.split(np.zeros(len(lab)), lab):
@@ -116,8 +124,8 @@ for ktrain, ktest in skf.split(np.zeros(len(lab)), lab):
     k_fb   = fb[ktrain]
     k_ia   = ia[ktrain]
     k_lab  = lab[ktrain]
-    k_vfb  =  hb[ktest]
-    k_vhb  =  fb[ktest]
+    k_vfb  =  fb[ktest]
+    k_vhb  =  hb[ktest]
     k_via  =  ia[ktest]
     k_vlab = lab[ktest]
 
@@ -141,13 +149,14 @@ for ktrain, ktest in skf.split(np.zeros(len(lab)), lab):
         epochs=300,
         validation_data=[[k_vfb, k_vhb, k_via], k_vlab],
         callbacks=[early_stopping, reduce_lr],
+        verbose = 0
     )
 
     print(f"Fold No.{fold_no}")
     print("------------------------------------------------------------------------")
     print("Prediction on Fold")
     scores = reset_model.evaluate([k_vfb, k_vhb, k_via], k_vlab, verbose=0)
-    predictions = reset_model.predict([k_vfb, k_vhb, k_via])
+    predictions = reset_model.predict([k_vfb, k_vhb, k_via], verbose = 0)
 
     loss_k_array.append(scores[0])
     auc_k_array.append(scores[1])
@@ -163,6 +172,13 @@ for ktrain, ktest in skf.split(np.zeros(len(lab)), lab):
     f1_k_array.append(f1_score)
     print(f"F1 Score: {f1_score}")
 
+    eq_acc_agn,eq_acc_psr, eq_th = met.best_eq_accuracy(k_vlab, predictions)
+    eq_th_k_array.append(eq_th)
+    eq_acc_agn_k_array.append(eq_acc_agn)
+    eq_acc_psr_k_array.append(eq_acc_psr)
+    print(f"EqAcc AGN: {eq_acc_agn}")
+    print(f"EqAcc PSR: {eq_acc_psr}")
+
     acc_agn, acc_psr = met.class_accuracy(th, k_vlab, predictions)
     acc_agn_k_array.append(acc_agn)
     acc_psr_k_array.append(acc_psr)
@@ -175,31 +191,38 @@ for ktrain, ktest in skf.split(np.zeros(len(lab)), lab):
 
     print("------------------------------------------------------------------------")
 
-    print("Prediction on Full Dataset")
-    scores = reset_model.evaluate([input_flux_band, input_flux_hist, input_additional], labels, verbose=0)
-    predictions = reset_model.predict([input_flux_band, input_flux_hist, input_additional])
+    print("Prediction on Evaluation Dataset")
+    scores = reset_model.evaluate([vfb, vhb, via], vlab, verbose=0)
+    predictions = reset_model.predict([vfb, vhb, via], verbose=0)
 
     loss_all_array.append(scores[0])
     auc_all_array.append(scores[1])
     print(f"Loss: {scores[0]}")
     print(f"AUC {scores[2]}")
 
-    acc, th = met.best_accuracy(labels, predictions)
+    acc, th = met.best_accuracy(vlab, predictions)
     accuracy_all_array.append(acc)
     th_all_array.append(th)
     print(f"Accuracy: {acc}")
 
-    f1_score = met.f1_score(th,labels, predictions)
+    f1_score = met.f1_score(th, vlab, predictions)
     f1_all_array.append(f1_score)
     print(f"F1 Score: {f1_score}")
 
-    acc_agn, acc_psr = met.class_accuracy(th, labels, predictions)
+    eq_acc_agn,eq_acc_psr, eq_th = met.best_eq_accuracy(vlab, predictions)
+    eq_th_all_array.append(eq_th)
+    eq_acc_agn_all_array.append(eq_acc_agn)
+    eq_acc_psr_all_array.append(eq_acc_psr)
+    print(f"EqAcc AGN: {eq_acc_agn}")
+    print(f"EqAcc PSR: {eq_acc_psr}")
+
+    acc_agn, acc_psr = met.class_accuracy(th, vlab, predictions)
     acc_agn_all_array.append(acc_agn)
     acc_psr_all_array.append(acc_psr)
     print(f"Accuracy AGN: {acc_agn} Accuracy PSR: {acc_psr}")
 
     th_pred = (predictions >= th).astype(int)
-    cm_sing = met.sk_metrics.confusion_matrix(labels, th_pred)
+    cm_sing = met.sk_metrics.confusion_matrix(vlab, th_pred)
     print(cm_sing)
     cm_all_array.append(cm_sing)
     print("------------------------------------------------------------------------")
@@ -209,21 +232,37 @@ for ktrain, ktest in skf.split(np.zeros(len(lab)), lab):
 
     fold_no = fold_no + 1
 # end for
+
+print(f"Best Model Was: {np.argmax(f1_all_array)}. Based on F1Score")
+cm_k_array = np.array(cm_k_array)
+cm_all_array = np.array(cm_all_array)
+
 print("------------------------------------------------------------------------\n")
 print("Average scores for all folds:")
 print("Prediction on Fold")
-print(f"> Loss: {np.mean(loss_k_array)}")
+print(f"> Loss: {np.mean(loss_k_array)}(+- {np.std(loss_k_array)})")
 print(f"> AUC: {np.mean(auc_k_array)} (+- {np.std(auc_k_array)})")
 print(f"> Accuracy: {np.mean(accuracy_k_array)} (+- {np.std(accuracy_k_array)})")
 print(f"> F1: {np.mean(f1_k_array)} (+- {np.std(f1_k_array)})")
+print(f"> EqAcc AGN: {np.mean(eq_acc_agn_k_array)} (+- {np.std(eq_acc_agn_k_array)})")
+print(f"> EqAcc PSR: {np.mean(eq_acc_psr_k_array)} (+- {np.std(eq_acc_psr_k_array)})")
 print(f"> Acc AGN: {np.mean(acc_agn_k_array)} (+- {np.std(acc_agn_k_array)})")
 print(f"> Acc PSR: {np.mean(acc_psr_k_array)} (+- {np.std(acc_psr_k_array)})")
+print("Confution Matrix")
+print(f"{np.mean(cm_k_array[:,0,0])}+-{np.std(cm_k_array[:,0,0])}\t{np.mean(cm_k_array[:,0,1])}+-{np.std(cm_k_array[:,0,1])}")
+print(f"{np.mean(cm_k_array[:,1,0])}+-{np.std(cm_k_array[:,1,0])}\t{np.mean(cm_k_array[:,1,1])}+-{np.std(cm_k_array[:,1,1])}")
+print("------------------------------------------------------------------------")
 print("--------------------------------------------------------")
-print("Prediction on All DataSet")
-print(f"> Loss: {np.mean(loss_all_array)}")
+print("Prediction on Evaluation DataSet")
+print(f"> Loss: {np.mean(loss_all_array)}(+- {np.std(loss_all_array)})")
 print(f"> AUC: {np.mean(auc_all_array)} (+- {np.std(auc_all_array)})")
 print(f"> Accuracy: {np.mean(accuracy_all_array)} (+- {np.std(accuracy_all_array)})")
 print(f"> F1: {np.mean(f1_all_array)} (+- {np.std(f1_all_array)})")
+print(f"> EqAcc AGN: {np.mean(eq_acc_agn_all_array)} (+- {np.std(eq_acc_agn_all_array)})")
+print(f"> EqAcc PSR: {np.mean(eq_acc_psr_all_array)} (+- {np.std(eq_acc_psr_all_array)})")
 print(f"> Acc AGN: {np.mean(acc_agn_all_array)} (+- {np.std(acc_agn_all_array)})")
 print(f"> Acc PSR: {np.mean(acc_psr_all_array)} (+- {np.std(acc_psr_all_array)})")
+print("Confution Matrix")
+print(f"{np.mean(cm_all_array[:,0,0])}+-{np.std(cm_all_array[:,0,0])}\t{np.mean(cm_all_array[:,0,1])}+-{np.std(cm_all_array[:,0,1])}")
+print(f"{np.mean(cm_all_array[:,1,0])}+-{np.std(cm_all_array[:,1,0])}\t{np.mean(cm_all_array[:,1,1])}+-{np.std(cm_all_array[:,1,1])}")
 print("------------------------------------------------------------------------")
