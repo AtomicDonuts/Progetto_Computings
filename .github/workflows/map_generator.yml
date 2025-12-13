@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  deploy-map:
+  deploy gh-pages:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,7 +21,7 @@ jobs:
       - name: Install Dependency
         run: |
           python -m pip install --upgrade pip
-          pip install astropy numpy loguru pandas plotly sphinx sphinx-rtd-theme
+          pip install astropy numpy loguru pandas plotly sphinx shibuya
       
       - name: Creating Directories
         run: |
