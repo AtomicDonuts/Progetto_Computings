@@ -1,6 +1,12 @@
-'''
-docstring
-'''
+"""
+This script performs the training of the Deep Neural Network (DNN) using a multi-input architecture.
+
+It handles data loading, feature engineering, normalization, class balancing,
+and hyperparameter tuning using Keras Tuner (Hyperband).
+The training process utilizes Stratified K-Fold cross-validation to ensure model robustness.
+Results, including accuracy, F1 score, and confusion matrices, are logged and best models are saved.
+"""
+
 import sys
 from pathlib import Path
 # pylint: disable=import-error, wrong-import-position
