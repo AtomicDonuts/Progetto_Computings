@@ -36,10 +36,10 @@ if Path(git_dir / "fits_import").exists():
 else:
     raise FileNotFoundError(f"{Path(git_dir / 'fits_import')} not found.")
 
-if Path(git_dir / "ann").exists():
-    dir_ann_path = Path(git_dir / "ann")
+if Path(git_dir / "dnn").exists():
+    dir_ann_path = Path(git_dir / "dnn")
 else:
-    raise FileNotFoundError(f"{Path(git_dir / 'ann')} not found.")
+    raise FileNotFoundError(f"{Path(git_dir / 'dnn')} not found.")
 
 if Path(dir_ann_path / "keras_models").exists():
     dir_models_path = Path(dir_ann_path / "keras_models")
