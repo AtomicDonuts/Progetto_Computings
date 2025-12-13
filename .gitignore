@@ -221,3 +221,5 @@ ann/colm_analisis.ipynb
 *.keras
 ann/Progetto
 *log*
+*pino*
+ann/run_triplednn.sh

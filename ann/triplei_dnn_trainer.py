@@ -32,10 +32,10 @@ import custom_variables as custom_paths
 import metrics as met
 # pylint: enable=import-error, wrong-import-position
 
+logger.debug("Loading Catalog..")
 df = pd.read_csv(custom_paths.csv_path)
 df = df[(df["CLASS_GENERIC"] == "AGN") | (df["CLASS_GENERIC"] == "Pulsar")]
-print(f"Sample Size: {len(df)}")
-
+logger.debug(f"Sample Size: {len(df)}")
 df["PowerLaw"] = np.where(df["SpectrumType"] == "PowerLaw",1,0,)
 df["LogParabola"] = np.where(df["SpectrumType"] == "LogParabola",1,0,)
 df["PLSuperExpCutoff"] = np.where(df["SpectrumType"] == "PLSuperExpCutoff",1,0,)
@@ -45,6 +45,7 @@ col_input1 = ["GLAT","Variability_Index" ,"PowerLaw","LogParabola","PLSuperExpCu
 col_flux_band = np.array([[f"Flux_Band_{i}", f"Sqrt_TS_Band_{i}"] for i in range(8)])
 col_flux_hist = np.array([[f"Flux_History_{i}", f"Sqrt_TS_History_{i}"] for i in range(14)])
 
+logger.debug("Normalizing Columns..")
 
 norm_cols = np.array(list(col_flux_band.flatten()) + list(col_flux_hist.flatten()))
 scaler = StandardScaler()
@@ -60,17 +61,20 @@ print(f"Additionl Size: {input_additional.shape}")
 print(f"Flux_Band Size: {input_flux_band.shape}")
 print(f"Flux_History Size: {input_flux_hist.shape}")
 
+logger.debug("Creating Labels..")
 
 is_agn = df["CLASS_GENERIC"].to_numpy() == "AGN"
 
 labels = np.zeros((len(df)), dtype=int)
 labels[~is_agn] = 1
 
+logger.debug("Creating Class Weights..")
 class_weight = class_weight.compute_class_weight(
     class_weight="balanced", classes=np.unique(labels), y=labels
 )
 class_weight = {index: value for index, value in enumerate(class_weight)}
 
+logger.debug("Splitting Dataset in Train e Test..")
 splitdata = StratifiedKFold(n_splits=4, shuffle=True)
 train, test = next(splitdata.split(np.zeros(len(labels)), labels))
 
@@ -83,7 +87,7 @@ vhb =  input_flux_hist[test]
 via = input_additional[test]
 vlab = labels[test]
 
-
+logger.debug("Start Tuner")
 tuner = kt.Hyperband(
     ann.hp_final_model,
     objective="val_loss",
@@ -102,6 +106,7 @@ tuner.search(
     class_weight=class_weight,
     callbacks=[stop_early],
 )
+logger.debug("Tuner Finished")
 best_model = tuner.get_best_models(num_models=1)[0]
 best_lr = best_model.optimizer.learning_rate
 
@@ -129,7 +134,7 @@ f1_all_array = []
 th_all_array = []
 cm_all_array = []
 
-
+logger.debug("Starting Traning for the best model with KFold")
 fold_no = 0
 skf = StratifiedKFold(n_splits=10, shuffle=True)
 for ktrain, ktest in skf.split(np.zeros(len(lab)), lab):
@@ -244,7 +249,7 @@ for ktrain, ktest in skf.split(np.zeros(len(lab)), lab):
 
     fold_no = fold_no + 1
 # end for
-
+logger.debug("Training End.")
 print(f"Best Model Was: {np.argmax(f1_all_array)}. Based on F1Score")
 cm_k_array = np.array(cm_k_array)
 cm_all_array = np.array(cm_all_array)
