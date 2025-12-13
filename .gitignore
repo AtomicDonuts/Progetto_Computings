@@ -216,10 +216,11 @@ __marimo__/
 *.root
 *.reg
 .vscode/
-!/ann/*.ipynb
-ann/colm_analisis.ipynb
+!/dnn/*.ipynb
+dnn/colm_analisis.ipynb
 *.keras
-ann/Progetto
+!dnn/prediction_model.keras
+dnn/Progetto
 *log*
 *pino*
-ann/run_triplednn.sh
+dnn/run_triplednn.sh
