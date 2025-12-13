@@ -1,5 +1,7 @@
 """
-docstring
+This module handles the prediction phase using a pre-trained Keras neural network model.
+It loads the catalog, pre-processes the data (normalization and feature engineering),
+and generates predictions (AGN vs Pulsar) based on the provided model.
 """
 
 import argparse
@@ -33,15 +35,27 @@ def model_prediction(
     model_path=custom_paths.model_path,
     threshold = 0.63
 ):
-    '''
-    model_prediction _summary_
+    """
+    Performs predictions on the provided astronomical catalog using a trained Keras model.
 
-    Args:
-        catalog_path (_type_, optional): _description_. Defaults to custom_paths.csv_path.
-        model_path (_type_, optional): _description_. Defaults to custom_paths.model_path.
-        prediction_path (_type_, optional): _description_. Defaults to custom_paths.prediction_path.
-        threshold (float, optional): _description_. Defaults to 0.63.
-    '''
+    The function loads the catalog and the model, normalizes the input features using
+    StandardScaler, and computes the classification (AGN or Pulsar) based on the
+    specified threshold.
+
+    :param catalog_path: Path to the input CSV catalog containing source data.
+                         Defaults to `custom_paths.csv_path`.
+    :type catalog_path: str or pathlib.Path, optional
+    :param model_path: Path to the saved Keras model (.keras).
+                       Defaults to `custom_paths.model_path`.
+    :type model_path: str or pathlib.Path, optional
+    :param threshold: The decision threshold for the binary classification.
+                      Values >= threshold are classified as Pulsar, otherwise AGN.
+                      Defaults to 0.63.
+    :type threshold: float, optional
+    :return: An array of string labels ('AGN' or 'Pulsar') corresponding to the predictions.
+    :rtype: numpy.ndarray
+    """
+    
     logger.info("Importing Model..")
     model = keras.models.load_model(model_path)
     logger.info("Importing Catalog")
