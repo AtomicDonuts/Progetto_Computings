@@ -21,7 +21,7 @@ def best_accuracy(true_labels, predicted_labels):
 
 def best_eq_accuracy(true_labels, predicted_labels):
     """Trova la soglia che minimizza la differenza di accuratezza tra le classi."""
-    thresholds = np.linspace(0, 1, 1001)
+    thresholds = np.linspace(0, 1, 10001)
     best_threshold = 0.5
     min_diff = 1.0
     best_agn = 0
