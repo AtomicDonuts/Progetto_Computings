@@ -1,6 +1,9 @@
 """
-Questo modulo genera la mappa a partire da file FITS, per la GitHub Action
+Script entry point for the GitHub Action map generation workflow.
+It orchestrates the conversion of FITS files to CSV and the subsequent generation
+of the HTML map.
 """
+
 # pylint: disable=import-error , wrong-import-position
 from pathlib import Path
 import sys

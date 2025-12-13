@@ -1,14 +1,7 @@
 """
-Script per la generazione di una mappa interattiva del cielo (Sky Map)
-delle sorgenti astronomiche.
-
-Questo script carica i dati da un catalogo in formato CSV (o da un DataFrame
-fornito in input) e genera un grafico di dispersione geografico (scatter_geo)
-interattivo utilizzando le coordinate Galattiche (GLAT e GLON).
-Il risultato finale è una mappa Plotly salvata in un file HTML specificato.
-
-Utilizzo da riga di comando:
-python map_example.py [-i <path_input_csv>] [-o <path_output_html>]
+This module is responsible for generating interactive sky maps using Plotly.
+It visualizes the galactic coordinates (GLAT, GLON) of sources and colors them
+according to their class.
 """
 
 import argparse
@@ -43,29 +36,22 @@ def fig_generator(
     html_output=custom_paths.map_path,
 ):
     """
-    Genera una mappa interattiva (scatter_geo) delle sorgenti utilizzando i dati
-    di latitudine (GLAT) e longitudine (GLON) Galattiche.
+    Generates an interactive scatter_geo map of astronomical sources.
 
-    Il grafico viene salvato nel path specificato da `html_output` in formato HTML.
+    The map uses Mollweide projection and displays custom hover information including
+    source name, position, and classification. The result is saved as an HTML file.
 
-    Args:
-        catalog_path (str | pathlib.Path, optional):
-            Path del catalogo in formato CSV da caricare. Viene ignorato se
-            viene fornito 'input_dataframe'.
-            Defaults to custom_paths.csv_path.
-
-        input_dataframe (pandas.DataFrame, optional):
-            DataFrame di pandas da utilizzare come input per la mappa. Se fornito,
-            il caricamento dal file CSV viene saltato.
-            Defaults to None.
-
-        html_output (str | pathlib.Path, optional):
-            Path completo dove salvare la mappa interattiva in formato HTML.
-            Defaults to custom_paths.map_path.
-
-    Returns:
-        plotly.express.Figure:
-            Oggetto Figure di Plotly contenente la tela della mappa interattiva generata.
+    :param catalog_path: Path to the CSV catalog. Ignored if `input_dataframe` is provided.
+                         Defaults to `custom_paths.csv_path`.
+    :type catalog_path: str or pathlib.Path, optional
+    :param input_dataframe: Pre-loaded Pandas DataFrame containing source data.
+                            Defaults to None.
+    :type input_dataframe: pandas.DataFrame, optional
+    :param html_output: Output path for the HTML map file.
+                        Defaults to `custom_paths.map_path`.
+    :type html_output: str or pathlib.Path, optional
+    :return: The generated Plotly figure object.
+    :rtype: plotly.graph_objs.Figure
     """
     if input_dataframe is None:
         logger.info(f"Loading from {catalog_path}")
@@ -152,19 +138,19 @@ def fig_generator(
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
-        description="Genera la mappa in hmtl nel file di output."
+        description="This script generates the interactive HTML map when executed from the terminal."
     )
     parser.add_argument(
         "--input_path",
         "-i",
         default=f"{custom_paths.csv_path}",
-        help="Path del cataologo in csv.",
+        help="Path to the CSV catalog file containing source informations.",
     )
     parser.add_argument(
         "--html_path",
         "-o",
         default=f"{custom_paths.map_path}",
-        help="Path di output del file html.",
+        help="Output path for the generated interactive HTML map.",
     )
     args = parser.parse_args()
 
