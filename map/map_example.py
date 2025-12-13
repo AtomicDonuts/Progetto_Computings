@@ -138,19 +138,19 @@ def fig_generator(
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
-        description="Genera la mappa in hmtl nel file di output."
+        description="This script generates the interactive HTML map when executed from the terminal."
     )
     parser.add_argument(
         "--input_path",
         "-i",
         default=f"{custom_paths.csv_path}",
-        help="Path del cataologo in csv.",
+        help="Path to the CSV catalog file containing source informations.",
     )
     parser.add_argument(
         "--html_path",
         "-o",
         default=f"{custom_paths.map_path}",
-        help="Path di output del file html.",
+        help="Output path for the generated interactive HTML map.",
     )
     args = parser.parse_args()
 
