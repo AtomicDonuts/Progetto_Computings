@@ -1,0 +1,197 @@
+"""
+doc
+"""
+
+from keras.layers import Concatenate, Dense, Dropout, Flatten, Input
+from keras.models import Model, Sequential
+
+
+def paper_model(flux_band_shape, flux_hist_shape):
+    """
+    doc string
+    """
+    inputs = Input(shape=flux_band_shape)
+    hidden = Flatten()(inputs)
+    hidden = Dense(16, activation="relu")(hidden)
+
+    inputs2 = Input(shape=flux_hist_shape)
+    hidden2 = Flatten()(inputs2)
+    hidden2 = Dense(16, activation="relu")(hidden2)
+
+    concat = Concatenate()([hidden2, hidden])
+    final_hidden = Dense(4, activation="relu")(concat)
+    outputs = Dense(2, activation="softmax")(final_hidden)
+    model = Model(inputs=[inputs, inputs2], outputs=outputs)
+    return model
+
+
+def simple_model(input_data_shape):
+    """
+    doc
+    """
+    model = Sequential()
+    model.add(Input(shape=input_data_shape))
+    model.add(Dense(16, activation="relu"))
+    model.add(Dropout(0.2))
+    model.add(Dense(32, activation="relu"))
+    model.add(Dropout(0.2))
+    model.add(Dense(16, activation="relu"))
+    model.add(Dropout(0.2))
+    model.add(Dense(4, activation="relu"))
+    model.add(Dense(1, activation="sigmoid"))
+    return model
+
+
+def hp_model(hp):
+    """
+    doc
+    """
+    model = Sequential()
+
+    nodes = hp.Choice("nodes", [4, 8, 16, 32])
+    drops = hp.Float("dropout", min_value=0.2, max_value=0.6, step=0.1)
+
+    model.add(Dense(units=nodes, activation="relu"))
+    model.add(Dropout(rate=drops))
+
+    model.add(Dense(units=nodes * 2, activation="relu"))
+    model.add(Dropout(rate=drops))
+
+    model.add(Dense(units=nodes, activation="relu"))
+    model.add(Dropout(rate=drops))
+
+    model.add(Dense(4, activation="relu"))
+    model.add(Dense(1, activation="sigmoid"))
+
+    model.compile(
+        loss="binary_crossentropy",
+        optimizer="adam",
+        metrics=[
+            "accuracy",
+            "auc",
+        ],
+    )
+    model.optimizer.learning_rate = 0.01
+    return model
+
+
+def hp_model_lr(hp):
+    """
+    doc
+    """
+    model = Sequential()
+
+    nodes = hp.Choice("nodes", [4, 8, 16, 32])
+    drops = hp.Float("dropout", min_value=0.2, max_value=0.6, step=0.1)
+    learning_rate = hp.Float("lr", min_value=1e-4, max_value=1e-2, sampling="log")
+
+    model.add(Dense(units=nodes, activation="relu"))
+    model.add(Dropout(rate=drops))
+
+    model.add(Dense(units=nodes * 2, activation="relu"))
+    model.add(Dropout(rate=drops))
+
+    model.add(Dense(units=nodes, activation="relu"))
+    model.add(Dropout(rate=drops))
+
+    model.add(Dense(units=int(nodes / 2), activation="relu"))
+    model.add(Dense(1, activation="sigmoid"))
+    model.compile(
+        optimizer="adam",
+        loss="binary_crossentropy",
+        metrics=[
+            "accuracy",
+            "auc",
+        ],
+    )
+    model.optimizer.learning_rate = learning_rate
+    return model
+
+
+def final_model(flux_band_shape, flux_hist_shape, input_data_shape):
+    """
+    final_model _summary_
+    """
+    inputs = Input(shape=flux_band_shape)
+    hidden = Dense(16, activation="relu")(inputs)
+    hidden = Dropout(0.2)(hidden)
+    hidden = Dense(4, activation="relu")(hidden)
+
+    inputs2 = Input(shape=flux_hist_shape)
+    hidden2 = Dense(16, activation="relu")(inputs2)
+    hidden2 = Dropout(0.2)(hidden2)
+    hidden2 = Dense(4, activation="relu")(hidden2)
+
+    inputs3 = Input(shape=input_data_shape)
+    hidden3 = Dense(16, activation="relu")(inputs3)
+    hidden3 = Dropout(0.2)(hidden3)
+    hidden3 = Dense(4, activation="relu")(hidden3)
+
+    concat = Concatenate()([hidden, hidden2, hidden3])
+    final_hidden = Dense(32, activation="relu")(concat)
+    final_hidden = Dense(4, activation="relu")(final_hidden)
+    outputs = Dense(1, activation="sigmoid")(final_hidden)
+
+    model = Model(
+        inputs=[
+            inputs,
+            inputs2,
+            inputs3
+        ],
+        outputs=outputs,
+    )
+    model.compile(
+        loss="binary_crossentropy",
+        optimizer="adam",
+        metrics=["accuracy",
+                 #"f1_score",
+                 "auc"],
+    )
+    model.optimizer.learning_rate = 0.01
+    return model
+
+
+def hp_final_model(hp):
+    """
+    final_model _summary_
+    """
+    nodes = hp.Choice("nodes", [4, 8, 16, 32])
+    drops = hp.Float("dropout", min_value=0.2, max_value=0.6, step=0.1)
+    learning_rate = hp.Float("lr", min_value=1e-4, max_value=1e-2, sampling="log")
+
+    inputs = Input(shape=(16,))
+    hidden = Dense(units = nodes * 2 , activation="relu")(inputs)
+    hidden = Dropout(rate = drops)(hidden)
+    hidden = Dense(units = nodes, activation="relu")(hidden)
+
+    inputs2 = Input(shape=(28,))
+    hidden2 = Dense(units=nodes * 2, activation="relu")(inputs2)
+    hidden2 = Dropout(rate=drops)(hidden2)
+    hidden2 = Dense(units=nodes, activation="relu")(hidden2)
+
+    inputs3 = Input(shape=(5,))
+    hidden3 = Dense(units=nodes * 2, activation="relu")(inputs3)
+    hidden3 = Dropout(rate=drops)(hidden3)
+    hidden3 = Dense(units=nodes, activation="relu")(hidden3)
+
+    concat = Concatenate()([hidden, hidden2, hidden3])
+    final_hidden = Dense(units=nodes * 2, activation="relu")(concat)
+    final_hidden = Dropout(rate=drops)(final_hidden)
+    final_hidden = Dense(units=nodes, activation="relu")(final_hidden)
+    final_hidden = Dense(units=4, activation="relu")(final_hidden)
+    outputs = Dense(1, activation="sigmoid")(final_hidden)
+
+    model = Model(
+        inputs=[inputs, inputs2, inputs3],
+        outputs=outputs,
+    )
+    model.compile(
+        loss="binary_crossentropy",
+        optimizer="adam",
+        metrics=[
+            "accuracy",
+            "auc",
+        ],
+    )
+    model.optimizer.learning_rate = learning_rate
+    return model

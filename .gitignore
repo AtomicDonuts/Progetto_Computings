@@ -215,6 +215,12 @@ __marimo__/
 *.csv 
 *.root
 *.reg
-#*.html
-.vscode/settings.json
-prova.py
+.vscode/
+!/dnn/*.ipynb
+dnn/colm_analisis.ipynb
+*.keras
+!dnn/prediction_model.keras
+dnn/Progetto
+*log*
+*pino*
+dnn/run_triplednn.sh

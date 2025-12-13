@@ -1,5 +1,6 @@
 astropy
 keras
+keras-tuner
 loguru
 matplotlib
 numpy
