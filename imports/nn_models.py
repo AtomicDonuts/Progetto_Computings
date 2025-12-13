@@ -2,7 +2,6 @@
 doc
 """
 
-import keras
 from keras.layers import Concatenate, Dense, Dropout, Flatten, Input
 from keras.models import Model, Sequential
 

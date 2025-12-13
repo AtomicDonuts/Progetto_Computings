@@ -70,7 +70,7 @@ png_path = dir_models_path / "model.png"
 
 # Dictionaries
 name_to_code = {
-    "Pulsar": ["PSR"],
+    "Pulsar": ["PSR","MSP"],
     "AGN": ["BLL", "FSRQ", "RDG", "AGN", "SSRQ", "CSS", "BCU", "NLSY1", "SEY"],
     "Globular cluster": "glc",
     "Starburst galaxy": "sbg",
