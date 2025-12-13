@@ -1,10 +1,7 @@
 """
-Converte il catalogo fits in un database di pandas.
-Se eseguito restituisce il catalogo convertito in csv nel Path
-di output scelto.
-
-Al momento restituisce un DataFrame per creare la mappa.
-Le colonne scelte saranno poi aggiustate in futuro.
+This module provides utilities to convert FITS catalog files into Pandas DataFrames and CSV files.
+It handles parsing of FITS extensions, cleaning of array columns, and integration
+of external DNN predictions into the dataset.
 """
 
 import argparse
@@ -41,7 +38,21 @@ def add_prediction(
     prediction_path=custom_paths.prediction_path,
 ):
     """
-    doc
+    Integrates the neural network predictions into the dataframe.
+
+    It adds a 'CLASS_DNN' column to the dataframe based on the predictions stored in
+    the numpy file.
+
+    :param catalog_path: Path to the CSV catalog to load if input_dataframe is not provided.
+                         Defaults to `custom_paths.csv_path`.
+    :type catalog_path: str or pathlib.Path, optional
+    :param input_dataframe: An existing DataFrame to modify. If provided, `catalog_path` is ignored.
+    :type input_dataframe: pandas.DataFrame, optional
+    :param prediction_path: Path to the numpy file (.npy) containing predictions.
+                            Defaults to `custom_paths.prediction_path`.
+    :type prediction_path: str or pathlib.Path, optional
+    :return: The DataFrame with the added 'CLASS_DNN' column.
+    :rtype: pandas.DataFrame
     """
     if input_dataframe is None:
         logger.info(f"Loading from {catalog_path}")
@@ -68,16 +79,20 @@ def add_prediction(
 def fits_to_pandas(fits_file_path=custom_paths.fits_path,
                    prediction_path=custom_paths.prediction_path,):
     """
-    fits_to_pandas
-    Funzione che converte il catalogo in fits in un database Pandas
-    Le informazioni esterne a "source" sono aggiunte in colonne
-    apposite che iniziano 'spectrum_' e 'spatial_'.
-    Args:
-        fits_file_path (srt,pathlib.Path): Path del catalogo in formato .fits
-        il default è definito del file "custom_variables.py"
+    Parses a FITS file and converts it into a clean Pandas DataFrame.
 
-    Returns:
-        pandas.DataFrame: Pandas DataBase del Catalogo.
+    This function extracts data from the FITS extension, expands array columns (e.g., Flux_Band)
+    into individual columns, normalizes string columns, and maps class codes to generic descriptions.
+    It also optionally loads and merges DNN predictions.
+
+    :param fits_file_path: Path to the input FITS catalog file.
+                           Defaults to `custom_paths.fits_path`.
+    :type fits_file_path: str or pathlib.Path
+    :param prediction_path: Path to the prediction file to integrate.
+                            Defaults to `custom_paths.prediction_path`.
+    :type prediction_path: str or pathlib.Path
+    :return: A cleaned and formatted DataFrame containing the catalog data.
+    :rtype: pandas.DataFrame
     """
     logger.info(f"Parsing FITS: {fits_file_path}...")
     data = fits.getdata(fits_file_path, ext=1)
