@@ -1,19 +1,32 @@
+'''
+docstring
+'''
 import sys
-
+from pathlib import Path
 # pylint: disable=import-error, wrong-import-position
-
 from loguru import logger
 import numpy as np
 import pandas as pd
 import keras
-from keras.models import load_model, clone_model
+from keras.models import clone_model
 import keras_tuner as kt
 from sklearn.utils import class_weight
 from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import StandardScaler
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 
-sys.path.append("../imports/")
+
+git_dir = None
+for i in Path(__file__).parents:
+    for j in i.iterdir():
+        if ".git" in j.as_posix() and j.is_dir():
+            git_dir = i
+if git_dir is None:
+    raise FileNotFoundError(
+        "Git Directory Not Found. Please ensure that you cloned the repository in the right way."
+    )
+import_dir = git_dir / "imports/"
+sys.path.append(import_dir.as_posix())
 import nn_models as ann
 import custom_variables as custom_paths
 import metrics as met
@@ -116,7 +129,7 @@ f1_all_array = []
 th_all_array = []
 cm_all_array = []
 
-logger.debug("Inizio Stratified KFolding")
+
 fold_no = 0
 skf = StratifiedKFold(n_splits=10, shuffle=True)
 for ktrain, ktest in skf.split(np.zeros(len(lab)), lab):
