@@ -147,25 +147,25 @@ def fits_to_pandas(fits_file_path=custom_paths.fits_path,
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Converte il catalogo fits in un file csv."
+        description="This script can be run as a standalone utility to convert FITS catalogs to CSV."
     )
     parser.add_argument(
         "--input_path",
         "-i",
         default=f"{custom_paths.fits_path}",
-        help="Path del cataologo fits.",
+        help="Path to the source FITS catalog file.",
     )
     parser.add_argument(
         "--output_path",
         "-o",
         default=f"{custom_paths.csv_path}",
-        help="Path di output del database csv.",
+        help="Destination path for the converted CSV file.",
     )
     parser.add_argument(
         "--prediction_path",
         "-p",
         default=f"{custom_paths.csv_path}",
-        help="Path delle prediction della rete neurale.",
+        help="Path to a numpy file containing DNN predictions to merge into the catalog.\nIf the file exists, a 'CLASS_DNN' column is added to the output.",
     )
     args = parser.parse_args()
     dataf = fits_to_pandas(args.input_path,args.prediction_path)
