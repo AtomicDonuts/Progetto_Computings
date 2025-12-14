@@ -18,7 +18,8 @@ An automatically generated interactive map displaying the distribution of classi
 * **Automation:** A GitHub Action automatically regenerates and deploys the map to GitHub Pages whenever the dataset or map script is updated.
 
 👉 **[Click here to view the Interactive Map with All Sources](https://atomicdonuts.github.io/Progetto_Computings/map/)**
-👉 **[Click here to view the Interactive Map with Only Not Associated Sources](https://atomicdonuts.github.io/Progetto_Computings/dnn_map/)**
+
+👉 **[Click here to view the Interactive Map with Only Not Associated Sources](https://atomicdonuts.github.io/Progetto_Computings/map_dnn/)**
 ## 📘 Documentation
 
 Complete documentation for the project is available here:

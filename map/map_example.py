@@ -75,6 +75,7 @@ def fig_generator(
             projection="mollweide",
             title="Interactive Map with All Sources",
             basemap_visible=False,
+            labels={"CLASS_GENERIC": "Source Type"},
         )
         fig.update_traces(
             hovertemplate=(
@@ -110,6 +111,7 @@ def fig_generator(
             projection="mollweide",
             title="Interactive Map with All Sources",
             basemap_visible=False,
+            labels={"CLASS_CLASS1": "Source Type"},
         )
         fig.update_traces(
             hovertemplate=(
@@ -181,6 +183,7 @@ def fig_generator_dnn(
             projection="mollweide",
             title="Interactive Map with Only Not Associated Sources",
             basemap_visible=False,
+            labels={"CLASS_DNN": "Associated Type"},
         )
         fig.update_traces(
             hovertemplate=(
@@ -209,6 +212,7 @@ def fig_generator_dnn(
             projection="mollweide",
             title="Interactive Map with Only Not Associated Sources",
             basemap_visible=False,
+            labels={"CLASS_CLASS1": "Source Type"},
         )
         fig.update_traces(
             hovertemplate=(
