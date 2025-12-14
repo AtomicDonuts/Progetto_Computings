@@ -27,6 +27,7 @@ jobs:
         run: |
           mkdir public
           mkdir public/map
+          mkdir public/map_dnn
           mkdir public/docs
 
 
@@ -53,6 +54,7 @@ jobs:
           mv docs/build/dirhtml/* public/docs/
           cp index.html public/index.html
           mv map/index.html public/map/index.html
+          mv map/index2.html public/map_dnn/index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
