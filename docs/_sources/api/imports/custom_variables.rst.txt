@@ -1,0 +1,7 @@
+custom\_variables module
+========================
+
+.. automodule:: custom_variables
+   :members:
+   :undoc-members:
+   :show-inheritance:

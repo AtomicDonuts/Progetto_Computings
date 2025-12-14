@@ -1,0 +1,7 @@
+map\_example module
+===================
+
+.. automodule:: map_example
+   :members:
+   :undoc-members:
+   :show-inheritance:

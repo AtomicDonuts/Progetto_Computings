@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" data-accent-color="violet" data-content_root="../../../">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"><title>nn_models module - DNN-4FGL 1.0 documentation</title><link rel="index" title="Index" href="../../../genindex/" /><link rel="search" title="Search" href="../../../search/" /><link rel="prev" title="metrics module" href="../metrics/" /><script>
+    function setColorMode(t){let e=document.documentElement;e.setAttribute("data-color-mode",t);let a=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches,s=t;"auto"===t&&(s=a?"dark":"light"),"light"===s?(e.classList.remove("dark"),e.classList.add("light")):(e.classList.remove("light"),e.classList.add("dark"))}
+    setColorMode(localStorage._theme||"auto");
+  </script><link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=e1a1ceaf" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/shibuya.css?v=83cb36c2" />
+    <link media="print" rel="stylesheet" type="text/css" href="../../../_static/print.css?v=20ff2c19" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sy-f-text: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-heading: "Inter", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+}
+</style>
+    <meta property="og:type" content="website"/><meta property="og:title" content="nn_models module"/>
+    <meta name="twitter:card" content="summary"/>
+  </head>
+<body><div class="sy-head">
+  <div class="sy-head-blur"></div>
+  <div class="sy-head-inner sy-container mx-auto">
+    <a class="sy-head-brand" href="../../../">
+      
+      
+      <strong>DNN-4FGL</strong>
+    </a>
+    <div class="sy-head-nav" id="head-nav">
+      <nav class="sy-head-links"></nav>
+      <div class="sy-head-extra flex items-center print:hidden"><form class="searchbox flex items-center" action="../../../search/" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <kbd>/</kbd>
+</form><div class="sy-head-socials"></div></div>
+    </div>
+    <div class="sy-head-actions flex items-center shrink-0 print:hidden"><button class="js-theme theme-switch flex items-center"
+data-aria-auto="Switch to light color mode"
+data-aria-light="Switch to dark color mode"
+data-aria-dark="Switch to auto color mode">
+<i class="i-lucide theme-icon"></i>
+</button><button class="md:hidden flex items-center js-menu" aria-label="Menu" type="button" aria-controls="head-nav" aria-expanded="false">
+        <div class="hamburger">
+          <span class="hamburger_1"></span>
+          <span class="hamburger_2"></span>
+          <span class="hamburger_3"></span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sy-page sy-container flex mx-auto">
+  <aside id="lside" class="sy-lside md:w-72 md:shrink-0 print:hidden">
+    <div class="sy-lside-inner md:sticky">
+      <div class="sy-scrollbar p-6">
+        <div class="globaltoc" data-expand-depth="0"><p class="caption" role="heading" aria-level="3"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../dnn/modules/">dnn</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../dnn/prediction/">prediction module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dnn/triplei_dnn_trainer/">triplei_dnn_trainer module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../fits_import/modules/">fits_import</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../fits_import/fits2csv/">fits2csv module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../map/modules/">map</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../map/map_example/">map_example module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../map/map_generator_action/">map_generator_action module</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../modules/">imports</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../custom_variables/">custom_variables module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/">metrics module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">nn_models module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="lside-overlay js-menu" role="button" aria-label="Close left sidebar" aria-controls="lside" aria-expanded="false"></div>
+  <aside id="rside" class="sy-rside pb-3 w-64 shrink-0 order-last">
+    <button class="rside-close js-menu xl:hidden" aria-label="Close Table of Contents" type="button" aria-controls="rside" aria-expanded="false">
+      <i class="i-lucide close"></i>
+    </button>
+    <div class="sy-scrollbar sy-rside-inner px-6 xl:top-16 xl:sticky xl:pl-0 pt-6 pb-4"><div class="localtoc"><h3>On this page</h3><ul>
+<li><a class="reference internal" href="#nn_models.final_model"><code class="docutils literal notranslate"><span class="pre">final_model()</span></code></a></li>
+<li><a class="reference internal" href="#nn_models.hp_final_model"><code class="docutils literal notranslate"><span class="pre">hp_final_model()</span></code></a></li>
+<li><a class="reference internal" href="#nn_models.hp_model_lr"><code class="docutils literal notranslate"><span class="pre">hp_model_lr()</span></code></a></li>
+<li><a class="reference internal" href="#nn_models.paper_model"><code class="docutils literal notranslate"><span class="pre">paper_model()</span></code></a></li>
+<li><a class="reference internal" href="#nn_models.simple_model"><code class="docutils literal notranslate"><span class="pre">simple_model()</span></code></a></li>
+</ul>
+</div><div id="ethical-ad-placement" data-ea-publisher="readthedocs"></div></div>
+  </aside>
+  <div class="rside-overlay js-menu" role="button" aria-label="Close Table of Contents" aria-controls="rside" aria-expanded="false"></div>
+  <main class="sy-main w-full max-sm:max-w-full print:pt-6">
+<div class="sy-breadcrumbs" role="navigation">
+  <div class="sy-breadcrumbs-inner flex items-center">
+    <div class="md:hidden mr-3">
+      <button class="js-menu" aria-label="Menu" type="button" aria-controls="lside" aria-expanded="false">
+        <i class="i-lucide menu"></i>
+      </button>
+    </div>
+    <ol class="flex-1" itemscope itemtype="https://schema.org/BreadcrumbList"><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../../../"><span itemprop="name">DNN-4FGL</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="1" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a itemprop="item" href="../modules/"><span itemprop="name">imports</span></a>
+        <span>/</span>
+        <meta itemprop="position" content="2" />
+      </li><li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <strong itemprop="name">nn_models module</strong>
+        <meta itemprop="position" content="3" />
+      </li></ol>
+    <div class="xl:hidden ml-1">
+      <button class="js-menu" aria-label="Show table of contents" type="button" aria-controls="rside"
+        aria-expanded="false">
+        <i class="i-lucide outdent"></i>
+      </button>
+    </div>
+  </div>
+</div><div class="flex flex-col break-words justify-between">
+      <div class="relative min-w-0 max-w-6xl px-6 pb-6 pt-8 xl:px-12">
+  
+
+
+<div class="copy-page-wrapper relative pb-4 lg:absolute lg:top-8 lg:right-6 xl:right-12">
+  <div id="copy-page-trigger">
+    <button
+      type="button"
+      class="js-copy px-3 py-1 inline-flex items-center gap-1"
+      data-url="../../../_sources/api/imports/nn_models.rst.txt"
+    >
+      <i class="i-lucide" data-icon="copy"></i>
+      <span>Copy page</span>
+    </button>
+    <button class="js-menu px-2 py-1" type="button" aria-label="More actions"
+      aria-haspopup="menu" aria-expanded="false" aria-controls="copy-page-content">
+      <i class="i-lucide chevron-down"></i>
+    </button>
+  </div>
+  <div id="copy-page-content" role="menu" aria-orientation="vertical" aria-hidden="true">
+    <div role="presentation">
+      <div class="flex flex-col" role="group">
+        <button class="js-copy" type="button" role="menuitem"
+          data-url="../../../_sources/api/imports/nn_models.rst.txt">
+          <span class="iconify-icon">
+            <i class="i-lucide" data-icon="copy"></i>
+          </span>
+          <span>Copy page</span>
+        </button>
+        <a role="menuitem" href="../../../_sources/api/imports/nn_models.rst.txt" target="_blank" rel="nofollow">
+          
+            <iconify-icon icon="bi:code-slash"></iconify-icon>
+            <span>View Source</span>
+          
+        </a>
+        
+        <a role="menuitem" href="https://chatgpt.com/?hints=search&q=Read%20../../../_sources/api/imports/nn_models.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:openai"></iconify-icon>
+          <span>Open in ChatGPT</span>
+        </a>
+        
+        
+        <a role="menuitem" href="https://claude.ai/new?q=Read%20../../../_sources/api/imports/nn_models.rst.txt%20so%20I%20can%20ask%20questions%20about%20it." target="_blank" rel="nofollow">
+          <iconify-icon icon="bi:claude"></iconify-icon>
+          <span>Open in Claude</span>
+        </a>
+        
+        
+      </div>
+    </div>
+  </div>
+</div>
+<article class="yue" role="main">
+          <section id="module-nn_models">
+<span id="nn-models-module"></span><h1>nn_models module<a class="headerlink" href="#module-nn_models" title="Link to this heading">¶</a></h1>
+<p>This module defines the Keras architectures for the Neural Networks used in the project.
+It includes simple models, multi-input models, and functions for hyperparameter tuning.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="nn_models.final_model">
+<span class="sig-prename descclassname"><span class="pre">nn_models.</span></span><span class="sig-name descname"><span class="pre">final_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flux_band_shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flux_hist_shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_data_shape</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/nn_models/#final_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nn_models.final_model" title="Link to this definition">¶</a></dt>
+<dd><p>Constructs the final three-input Neural Network architecture.
+Inputs are: Flux Band, Flux History, and Additional Features (e.g., Coordinates, Index).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>flux_band_shape</strong> (<em>tuple</em>) – Shape tuple for Flux Band input.</p></li>
+<li><p><strong>flux_hist_shape</strong> (<em>tuple</em>) – Shape tuple for Flux History input.</p></li>
+<li><p><strong>input_data_shape</strong> (<em>tuple</em>) – Shape tuple for Additional Features input.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A compiled Keras Model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>keras.models.Model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nn_models.hp_final_model">
+<span class="sig-prename descclassname"><span class="pre">nn_models.</span></span><span class="sig-name descname"><span class="pre">hp_final_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/nn_models/#hp_final_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nn_models.hp_final_model" title="Link to this definition">¶</a></dt>
+<dd><p>Constructs a tunable version of the final three-input architecture for Keras Tuner.
+Allows tuning of layer sizes, dropout, and learning rate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hp</strong> (<em>keras_tuner.HyperParameters</em>) – Hyperparameters object from Keras Tuner.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A compiled Keras Model ready for tuning.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>keras.models.Model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nn_models.hp_model_lr">
+<span class="sig-prename descclassname"><span class="pre">nn_models.</span></span><span class="sig-name descname"><span class="pre">hp_model_lr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hp</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/nn_models/#hp_model_lr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nn_models.hp_model_lr" title="Link to this definition">¶</a></dt>
+<dd><p>Builds a tunable sequential model that also tunes the learning rate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>hp</strong> (<em>keras_tuner.HyperParameters</em>) – Hyperparameters object from Keras Tuner.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A compiled Keras Model with tunable learning rate.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>keras.models.Sequential</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nn_models.paper_model">
+<span class="sig-prename descclassname"><span class="pre">nn_models.</span></span><span class="sig-name descname"><span class="pre">paper_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flux_band_shape</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flux_hist_shape</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/nn_models/#paper_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nn_models.paper_model" title="Link to this definition">¶</a></dt>
+<dd><p>Builds a multi-input neural network model based on the reference paper architecture.
+It takes flux bands and flux history as separate inputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>flux_band_shape</strong> (<em>tuple</em>) – Shape of the flux band input features.</p></li>
+<li><p><strong>flux_hist_shape</strong> (<em>tuple</em>) – Shape of the flux history input features.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A compiled Keras Model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>keras.models.Model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nn_models.simple_model">
+<span class="sig-prename descclassname"><span class="pre">nn_models.</span></span><span class="sig-name descname"><span class="pre">simple_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_data_shape</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/nn_models/#simple_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#nn_models.simple_model" title="Link to this definition">¶</a></dt>
+<dd><p>Builds a simple sequential Feed-Forward Neural Network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_data_shape</strong> (<em>tuple</em>) – Shape of the input features.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A uncompiled Keras Sequential Model.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>keras.models.Sequential</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+        </article><button class="back-to-top" type="button">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+  </svg>
+  <span>Back to top</span>
+</button><div class="navigation flex print:hidden"><div class="navigation-prev">
+    <a href="../metrics/">
+      <i class="i-lucide chevron-left"></i>
+      <div class="page-info">
+        <span>Previous</span><div class="title">metrics module</div></div>
+    </a>
+  </div></div></div>
+    </div>
+  </main>
+</div>
+<footer class="sy-foot">
+  <div class="sy-foot-inner sy-container mx-auto">
+    <div class="sy-foot-reserved md:flex justify-between items-center">
+      <div class="sy-foot-copyright"><p>2025, Pasquale Napoli</p>
+  
+  <p>
+    Made with
+    
+    <a href="https://www.sphinx-doc.org/">Sphinx</a> and
+    
+    <a href="https://shibuya.lepture.com">Shibuya theme</a>.
+  </p>
+</div>
+      <div class="sy-foot-socials"></div>
+    </div>
+  </div>
+</footer>
+      <script src="../../../_static/documentation_options.js?v=94e0f085"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/shibuya.js?v=cac61aee"></script></body>
+</html>

@@ -1,0 +1,7 @@
+fits_import
+===========
+
+.. toctree::
+   :maxdepth: 4
+
+   fits2csv
