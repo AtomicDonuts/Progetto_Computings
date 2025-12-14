@@ -61,10 +61,6 @@ def model_prediction(
     logger.info("Importing Catalog")
     df = pd.read_csv(catalog_path)
 
-    df["PowerLaw"] = np.where(df["SpectrumType"] == "PowerLaw",1,0,)
-    df["LogParabola"] = np.where(df["SpectrumType"] == "LogParabola",1,0,)
-    df["PLSuperExpCutoff"] = np.where(df["SpectrumType"] == "PLSuperExpCutoff",1,0,)
-
     col_input1 = [
         "GLAT",
         "Variability_Index",

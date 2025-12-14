@@ -127,6 +127,11 @@ def fits_to_pandas(fits_file_path=custom_paths.fits_path,
     df[df.select_dtypes(["object"]).columns] = df.select_dtypes(["object"]).apply(
         lambda x: x.str.strip()
     )
+    
+    df["PowerLaw"] = np.where(df["SpectrumType"] == "PowerLaw",1,0,)
+    df["LogParabola"] = np.where(df["SpectrumType"] == "LogParabola",1,0,)
+    df["PLSuperExpCutoff"] = np.where(df["SpectrumType"] == "PLSuperExpCutoff",1,0,)
+
     df["CLASS_TYPE"] = df["CLASS1"].str.upper()
     df["CLASS_DESCRIPTION"] = np.where(
         df["CLASS1"].str.isupper(), "Identified", "Associated"

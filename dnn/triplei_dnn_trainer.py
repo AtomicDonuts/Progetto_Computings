@@ -42,9 +42,6 @@ logger.debug("Loading Catalog..")
 df = pd.read_csv(custom_paths.csv_path)
 df = df[(df["CLASS_GENERIC"] == "AGN") | (df["CLASS_GENERIC"] == "Pulsar")]
 logger.debug(f"Sample Size: {len(df)}")
-df["PowerLaw"] = np.where(df["SpectrumType"] == "PowerLaw",1,0,)
-df["LogParabola"] = np.where(df["SpectrumType"] == "LogParabola",1,0,)
-df["PLSuperExpCutoff"] = np.where(df["SpectrumType"] == "PLSuperExpCutoff",1,0,)
 
 col_input1 = ["GLAT","Variability_Index" ,"PowerLaw","LogParabola","PLSuperExpCutoff"]
 
