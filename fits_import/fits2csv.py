@@ -164,7 +164,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--prediction_path",
         "-p",
-        default=f"{custom_paths.csv_path}",
+        default=f"{custom_paths.prediction_path}",
         help="Path to a numpy file containing DNN predictions to merge into the catalog.\nIf the file exists, a 'CLASS_DNN' column is added to the output.",
     )
     args = parser.parse_args()

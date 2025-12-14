@@ -32,3 +32,7 @@ map_fun.fig_generator(
     input_dataframe=fit_fun.fits_to_pandas(),
     html_output=custom_paths.map_path,
 )
+map_fun.fig_generator_dnn(
+    input_dataframe=fit_fun.fits_to_pandas(),
+    html_output=custom_paths.dnnmap_path,
+)
