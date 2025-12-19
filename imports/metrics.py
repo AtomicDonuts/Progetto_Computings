@@ -34,7 +34,7 @@ def best_accuracy(true_labels, predicted_labels):
 def best_eq_accuracy(true_labels, predicted_labels):
     """
     Finds the threshold that minimizes the difference between the accuracy of the two classes.
-    This is useful for balancing performance on unbalanced datasets (e.g., AGN vs Pulsar).
+    This is useful for balancing performance on unbalanced datasets.
 
     :param true_labels: The ground truth binary labels.
     :type true_labels: numpy.ndarray
@@ -46,21 +46,21 @@ def best_eq_accuracy(true_labels, predicted_labels):
     thresholds = np.linspace(0, 1, 10001)
     best_threshold = 0.5
     min_diff = 1.0
-    best_agn = 0
-    best_psr = 0
+    best_tnr = 0
+    best_tpr = 0
     for t in thresholds:
         th_pred = (predicted_labels >= t).astype(int)
         cm = sk_metrics.confusion_matrix(true_labels, th_pred)
         tn, fp, fn, tp = cm.ravel()
-        acc_agn = tn / (tn + fp) if (tn + fp) > 0 else 0
-        acc_psr = tp / (tp + fn) if (tp + fn) > 0 else 0
-        diff = abs(acc_agn - acc_psr)
+        true_negative_rate = tn / (tn + fp) if (tn + fp) > 0 else 0
+        true_positive_rate = tp / (tp + fn) if (tp + fn) > 0 else 0
+        diff = abs(true_negative_rate - true_positive_rate)
         if diff < min_diff:
             min_diff = diff
-            best_agn = acc_agn
-            best_psr = acc_psr
+            best_tnr = true_negative_rate
+            best_tpr = true_positive_rate
             best_threshold = t
-    return best_agn, best_psr, best_threshold
+    return best_tnr, best_tpr, best_threshold
 
 
 def best_f1_score(true_labels, predicted_labels):
@@ -122,9 +122,9 @@ def class_accuracy(th, true_labels, predicted_labels):
     th_pred = (predicted_labels >= th).astype(int)
     cm = sk_metrics.confusion_matrix(true_labels, th_pred)
     tn, fp, fn, tp = cm.ravel()
-    class_0 = tn / (tn + fp) if (tn + fp) > 0 else 0
-    class_1 = tp / (tp + fn) if (tp + fn) > 0 else 0
-    return class_0, class_1
+    true_negative_rate = tn / (tn + fp) if (tn + fp) > 0 else 0
+    true_positive_rate = tp / (tp + fn) if (tp + fn) > 0 else 0
+    return true_negative_rate, true_positive_rate
 
 
 def f1_score(th, true_labels, predicted_labels):
@@ -145,3 +145,15 @@ def f1_score(th, true_labels, predicted_labels):
     tn, fp, fn, tp = cm.ravel()
     f1 = tp / (tp + 0.5 * (fp + fn))
     return f1
+
+def roc_curve(true_labels,predicted_labels):
+    thresholds = np.linspace(0, 1, 101)
+    roc_curve_array = []
+    for th in thresholds:
+        th_pred = (predicted_labels >= th).astype(int)
+        cm = sk_metrics.confusion_matrix(true_labels, th_pred)
+        tn, fp, fn, tp = cm.ravel()
+        false_positive_rate = fp / (tn + fp) if (tn + fp) > 0 else 0
+        true_positive_rate = tp / (tp + fn) if (tp + fn) > 0 else 0
+        roc_curve_array.append((false_positive_rate,true_positive_rate))
+    return roc_curve_array
