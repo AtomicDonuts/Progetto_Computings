@@ -3,7 +3,7 @@ This module defines global variables and file paths used throughout the project.
 It dynamically locates the git root directory to ensure paths work regardless of
 execution context.
 """
-import os
+
 from pathlib import Path
 
 GIT_DIR = None
@@ -18,47 +18,13 @@ if GIT_DIR is None:
 
 # Folders
 
-if Path(GIT_DIR / "imports").exists():
-    dir_imports_path = Path(GIT_DIR / "imports")
-else:
-    os.makedirs(Path(GIT_DIR / "imports"))
-    dir_imports_path = Path(GIT_DIR / "imports")
-
-if Path(GIT_DIR / "map").exists():
-    dir_map_path = Path(GIT_DIR / "map")
-else:
-    os.makedirs(Path(GIT_DIR / "map"))
-    dir_map_path = Path(GIT_DIR / "map")
-
-if Path(GIT_DIR / "files").exists():
-    dir_files_path = Path(GIT_DIR / "files")
-else:
-    os.makedirs(Path(GIT_DIR / "files"))
-    dir_files_path = Path(GIT_DIR / "files")
-
-if Path(GIT_DIR / "fits_import").exists():
-    dir_fits_import_path = Path(GIT_DIR / "fits_import")
-else:
-    os.makedirs(Path(GIT_DIR / "fits_import"))
-    dir_fits_import_path = Path(GIT_DIR / "fits_import")
-
-if Path(GIT_DIR / "dnn").exists():
-    dir_ann_path = Path(GIT_DIR / "dnn")
-else:
-    os.makedirs(Path(GIT_DIR / "dnn"))
-    dir_ann_path = Path(GIT_DIR / "dnn")
-
-if Path(dir_ann_path / "keras_models").exists():
-    dir_models_path = Path(dir_ann_path / "keras_models")
-else:
-    os.makedirs(Path(GIT_DIR / "keras_models"))
-    dir_models_path = Path(dir_ann_path / "keras_models")
-
-if Path(dir_ann_path / "tuner").exists():
-    dir_tuner_path = Path(dir_ann_path / "tuner")
-else:
-    os.makedirs(Path(GIT_DIR / "tuner"))
-    dir_tuner_path = Path(dir_ann_path / "tuner")
+dir_imports_path = Path(GIT_DIR / "imports")
+dir_map_path = Path(GIT_DIR / "map")
+dir_files_path = Path(GIT_DIR / "files")
+dir_fits_import_path = Path(GIT_DIR / "fits_import")
+dir_ann_path = Path(GIT_DIR / "dnn")
+dir_models_path = Path(dir_ann_path / "keras_models")
+dir_tuner_path = Path(dir_ann_path / "tuner")
 
 # Files
 fits_path = dir_files_path / "gll_psc_v35.fit"
