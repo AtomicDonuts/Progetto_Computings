@@ -108,6 +108,7 @@ tuner.search(
     validation_split=0.5,
     class_weight=class_weight,
     callbacks=[stop_early],
+    verbose = 2
 )
 logger.debug("Tuner Finished")
 best_model = tuner.get_best_models(num_models=1)[0]
@@ -169,14 +170,15 @@ for ktrain, ktest in skf.split(np.zeros(len(lab)), lab):
         y=k_lab,
         epochs=300,
         validation_data=[[k_vfb, k_vhb, k_via], k_vlab],
-        callbacks=[early_stopping, reduce_lr]
+        callbacks=[early_stopping, reduce_lr],
+        verbose = 2,# pyright: ignore[reportArgumentType]
     )
 
     print(f"Fold No.{fold_no}")
     print("------------------------------------------------------------------------")
     print("Prediction on Fold")
-    scores = reset_model.evaluate([k_vfb, k_vhb, k_via], k_vlab)
-    predictions = reset_model.predict([k_vfb, k_vhb, k_via])
+    scores = reset_model.evaluate([k_vfb, k_vhb, k_via], k_vlab,verbose = 2,) # pyright: ignore[reportArgumentType]
+    predictions = reset_model.predict([k_vfb, k_vhb, k_via],verbose = 2,) # pyright: ignore[reportArgumentType]
 
     loss_k_array.append(scores[0])
     auc_k_array.append(scores[1])
@@ -212,8 +214,8 @@ for ktrain, ktest in skf.split(np.zeros(len(lab)), lab):
     print("------------------------------------------------------------------------")
 
     print("Prediction on Evaluation Dataset")
-    scores = reset_model.evaluate([vfb, vhb, via], vlab)
-    predictions = reset_model.predict([vfb, vhb, via])
+    scores = reset_model.evaluate([vfb, vhb, via], vlab,verbose = 2,)# pyright: ignore[reportArgumentType]
+    predictions = reset_model.predict([vfb, vhb, via],verbose = 2,)# pyright: ignore[reportArgumentType]
 
     loss_all_array.append(scores[0])
     auc_all_array.append(scores[1])
@@ -254,6 +256,8 @@ for ktrain, ktest in skf.split(np.zeros(len(lab)), lab):
 # end for
 logger.debug("Training End.")
 print(f"Best Model Was: {np.argmax(f1_all_array)}. Based on F1Score")
+print(f"Dense Layer: {best_model.layers[3].units}")
+print(f"Dropout Rate: {best_model.layers[6].rate}")
 cm_k_array = np.array(cm_k_array)
 cm_all_array = np.array(cm_all_array)
 
