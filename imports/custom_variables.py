@@ -6,47 +6,52 @@ execution context.
 
 from pathlib import Path
 
-git_dir = None
+GIT_DIR = None
 for i in Path(__file__).parents:
     for j in i.iterdir():
         if ".git" in j.as_posix() and j.is_dir():
-            git_dir = i
-if git_dir is None:
+            GIT_DIR = i
+if GIT_DIR is None:
     raise FileNotFoundError(
         "Git Directory Not Found. Please ensure that you cloned the repository in the right way."
     )
 
 # Folders
 
-if Path(git_dir / "imports").exists():
-    dir_imports_path = Path(git_dir / "imports")
+if Path(GIT_DIR / "imports").exists():
+    dir_imports_path = Path(GIT_DIR / "imports")
 else:
-    raise FileNotFoundError(f"{Path(git_dir / 'imports')} not found.")
+    raise FileNotFoundError(f"{Path(GIT_DIR / 'imports')} not found.")
 
-if Path(git_dir / "map").exists():
-    dir_map_path = Path(git_dir / "map")
+if Path(GIT_DIR / "map").exists():
+    dir_map_path = Path(GIT_DIR / "map")
 else:
-    raise FileNotFoundError(f"{Path(git_dir / 'map')} not found.")
+    raise FileNotFoundError(f"{Path(GIT_DIR / 'map')} not found.")
 
-if Path(git_dir / "files").exists():
-    dir_files_path = Path(git_dir / "files")
+if Path(GIT_DIR / "files").exists():
+    dir_files_path = Path(GIT_DIR / "files")
 else:
-    raise FileNotFoundError(f"{Path(git_dir / 'files')} not found.")
+    raise FileNotFoundError(f"{Path(GIT_DIR / 'files')} not found.")
 
-if Path(git_dir / "fits_import").exists():
-    dir_fits_import_path = Path(git_dir / "fits_import")
+if Path(GIT_DIR / "fits_import").exists():
+    dir_fits_import_path = Path(GIT_DIR / "fits_import")
 else:
-    raise FileNotFoundError(f"{Path(git_dir / 'fits_import')} not found.")
+    raise FileNotFoundError(f"{Path(GIT_DIR / 'fits_import')} not found.")
 
-if Path(git_dir / "dnn").exists():
-    dir_ann_path = Path(git_dir / "dnn")
+if Path(GIT_DIR / "dnn").exists():
+    dir_ann_path = Path(GIT_DIR / "dnn")
 else:
-    raise FileNotFoundError(f"{Path(git_dir / 'dnn')} not found.")
+    raise FileNotFoundError(f"{Path(GIT_DIR / 'dnn')} not found.")
 
 if Path(dir_ann_path / "keras_models").exists():
     dir_models_path = Path(dir_ann_path / "keras_models")
 else:
     raise FileNotFoundError(f"{Path(dir_ann_path / 'keras_models')} not found.")
+
+if Path(dir_ann_path / "tuner").exists():
+    dir_tuner_path = Path(dir_ann_path / "tuner")
+else:
+    raise FileNotFoundError(f"{Path(dir_ann_path / 'tuner')} not found.")
 
 #   Folder Import Dinamica
 #   VSCode lo odia partiolarmente tanto
@@ -73,6 +78,11 @@ dnnmap_path = dir_map_path / "index2.html"
 model_path = dir_models_path / "prediction_model.keras"
 prediction_path = dir_models_path / "prediction.npy"
 png_path = dir_models_path / "model.png"
+
+train_data_path = dir_tuner_path / "train_data.npy"
+train_label_path = dir_tuner_path / "train_label.npy"
+validation_data_path = dir_tuner_path /  "validation_data.npy"
+validation_label_path = dir_tuner_path / "validation_label.npy"
 
 # Dictionaries
 code_to_name = {
