@@ -43,7 +43,7 @@ def best_eq_accuracy(true_labels, predicted_labels):
     :return: A tuple containing (Accuracy Class 0, Accuracy Class 1, Best Threshold).
     :rtype: tuple(float, float, float)
     """
-    thresholds = np.linspace(0, 1, 10001)
+    thresholds = np.linspace(0, 1, 1001)
     best_threshold = 0.5
     min_diff = 1.0
     best_tnr = 0

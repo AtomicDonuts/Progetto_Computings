@@ -221,6 +221,7 @@ dnn/colm_analisis.ipynb
 *.keras
 !dnn/prediction_model.keras
 dnn/Progetto
+dnn/tuner
 *log*
 *pino*
 dnn/run_triplednn.sh
