@@ -20,13 +20,12 @@ from loguru import logger
 import numpy as np
 import pandas as pd
 import keras
+from keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from keras.models import clone_model
 import keras_tuner as kt
 from sklearn.utils import class_weight
 from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import StandardScaler
-from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau  # pylint: disable=no-name-in-module
-
 
 GIT_DIR = None
 for i in Path(__file__).parents:
