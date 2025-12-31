@@ -3,7 +3,7 @@ This module defines global variables and file paths used throughout the project.
 It dynamically locates the git root directory to ensure paths work regardless of
 execution context.
 """
-
+import os
 from pathlib import Path
 
 GIT_DIR = None
@@ -21,52 +21,44 @@ if GIT_DIR is None:
 if Path(GIT_DIR / "imports").exists():
     dir_imports_path = Path(GIT_DIR / "imports")
 else:
-    raise FileNotFoundError(f"{Path(GIT_DIR / 'imports')} not found.")
+    os.makedirs(Path(GIT_DIR / "imports"))
+    dir_imports_path = Path(GIT_DIR / "imports")
 
 if Path(GIT_DIR / "map").exists():
     dir_map_path = Path(GIT_DIR / "map")
 else:
-    raise FileNotFoundError(f"{Path(GIT_DIR / 'map')} not found.")
+    os.makedirs(Path(GIT_DIR / "map"))
+    dir_map_path = Path(GIT_DIR / "map")
 
 if Path(GIT_DIR / "files").exists():
     dir_files_path = Path(GIT_DIR / "files")
 else:
-    raise FileNotFoundError(f"{Path(GIT_DIR / 'files')} not found.")
+    os.makedirs(Path(GIT_DIR / "files"))
+    dir_files_path = Path(GIT_DIR / "files")
 
 if Path(GIT_DIR / "fits_import").exists():
     dir_fits_import_path = Path(GIT_DIR / "fits_import")
 else:
-    raise FileNotFoundError(f"{Path(GIT_DIR / 'fits_import')} not found.")
+    os.makedirs(Path(GIT_DIR / "fits_import"))
+    dir_fits_import_path = Path(GIT_DIR / "fits_import")
 
 if Path(GIT_DIR / "dnn").exists():
     dir_ann_path = Path(GIT_DIR / "dnn")
 else:
-    raise FileNotFoundError(f"{Path(GIT_DIR / 'dnn')} not found.")
+    os.makedirs(Path(GIT_DIR / "dnn"))
+    dir_ann_path = Path(GIT_DIR / "dnn")
 
 if Path(dir_ann_path / "keras_models").exists():
     dir_models_path = Path(dir_ann_path / "keras_models")
 else:
-    raise FileNotFoundError(f"{Path(dir_ann_path / 'keras_models')} not found.")
+    os.makedirs(Path(GIT_DIR / "keras_models"))
+    dir_models_path = Path(dir_ann_path / "keras_models")
 
 if Path(dir_ann_path / "tuner").exists():
     dir_tuner_path = Path(dir_ann_path / "tuner")
 else:
-    raise FileNotFoundError(f"{Path(dir_ann_path / 'tuner')} not found.")
-
-#   Folder Import Dinamica
-#   VSCode lo odia partiolarmente tanto
-
-# required_dirs = [
-#     dir.name for dir in git_dir.iterdir() if (dir.is_dir()) and ("." not in dir.name)
-# ]
-
-# for folder in required_dirs:
-#     target_path = git_dir / folder
-#     if target_path.exists():
-#         globals()[f"dir_{folder}_path"] = target_path
-#     else:
-#         raise FileNotFoundError(f"{target_path} not found.")
-
+    os.makedirs(Path(GIT_DIR / "tuner"))
+    dir_tuner_path = Path(dir_ann_path / "tuner")
 
 # Files
 fits_path = dir_files_path / "gll_psc_v35.fit"
