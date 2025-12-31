@@ -1,0 +1,7 @@
+single\_dnn\_trainer module
+===========================
+
+.. automodule:: single_dnn_trainer
+   :members:
+   :undoc-members:
+   :show-inheritance:

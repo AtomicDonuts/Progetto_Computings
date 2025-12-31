@@ -1,0 +1,7 @@
+triplei\_dnn\_trainer module
+============================
+
+.. automodule:: triplei_dnn_trainer
+   :members:
+   :undoc-members:
+   :show-inheritance:

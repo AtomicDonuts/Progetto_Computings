@@ -1,0 +1,7 @@
+map\_generator\_action module
+=============================
+
+.. automodule:: map_generator_action
+   :members:
+   :undoc-members:
+   :show-inheritance:

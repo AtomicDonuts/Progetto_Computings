@@ -1,0 +1,7 @@
+fits2csv module
+===============
+
+.. automodule:: fits2csv
+   :members:
+   :undoc-members:
+   :show-inheritance:

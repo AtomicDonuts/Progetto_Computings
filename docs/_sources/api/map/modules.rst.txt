@@ -1,0 +1,8 @@
+map
+===
+
+.. toctree::
+   :maxdepth: 4
+
+   map_example
+   map_generator_action
